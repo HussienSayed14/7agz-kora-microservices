@@ -1,0 +1,54 @@
+package com.accountmicroservice.entities;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "USER")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private String id;
+
+    @Column(name = "FIRST_NAME")
+    private String firstName;
+    @Column(name = "LAST_NAME")
+    private String lastName;
+    @Column(name="EMAIL", unique = true)
+    private String email;
+    @Column(name = "PASSWORD")
+    private String password;
+    @Column(name = "PHONE_NUMBER")
+    private String phoneNumber;
+    @Column(name = "ROLE")
+    private String role;
+    @Column(name = "DATE_OF_BIRTH")
+    private String dateOfBirth;
+    @Column(name = "SECURITY_QUESTION")
+    private String securityQuestion;
+    @Column(name = "SECURITY_ANSWER")
+    private String securityAnswer;
+    @Column(name = "IS_BLOCKED")
+    private boolean isBlocked;
+    @Column(name = "IS_VERIFIED")
+    private boolean isVerified;
+    @Column(name = "OTP")
+    private String otp;
+    @Column(name = "OTP_EXPIRY")
+    private String otpExpiry;
+    @Column(name = "IS_ACTIVE")
+    private boolean isActive;
+    @Column(name = "NATIONAL_ID")
+    private String nationalId;
+    @Column(name = "CREATATION_DATE")
+    private String creationDate;
+    @Column(name = "CREATION_TIME")
+    private String creationTime;
+}
