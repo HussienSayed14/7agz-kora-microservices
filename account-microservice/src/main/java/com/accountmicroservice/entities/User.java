@@ -52,6 +52,8 @@ public class User implements UserDetails {
     private String creationTime;
     @Column(name = "FAILED_LOGIN_ATTEMPTS")
     private int failedLoginAttempts;
+    @Column(name = "LAST_LOGIN_DATE")
+    private String lastLoginDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
