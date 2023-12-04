@@ -17,16 +17,15 @@ import java.util.Collection;
 public class User implements UserDetails {
 
     @Id
+    @Column(name="EMAIL", unique = true)
+    private String email;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private String id;
-
+    private long id;
     @Column(name = "FIRST_NAME")
     private String firstName;
     @Column(name = "LAST_NAME")
     private String lastName;
-    @Column(name="EMAIL", unique = true)
-    private String email;
     @Column(name = "PASSWORD")
     private String password;
     @Column(name = "PHONE_NUMBER")
@@ -43,10 +42,6 @@ public class User implements UserDetails {
     private boolean isBlocked;
     @Column(name = "IS_VERIFIED")
     private boolean isVerified;
-    @Column(name = "OTP")
-    private String otp;
-    @Column(name = "OTP_EXPIRY")
-    private String otpExpiry;
     @Column(name = "IS_ACTIVE")
     private boolean isActive;
     @Column(name = "NATIONAL_ID")
@@ -55,6 +50,8 @@ public class User implements UserDetails {
     private String creationDate;
     @Column(name = "CREATION_TIME")
     private String creationTime;
+    @Column(name = "FAILED_LOGIN_ATTEMPTS")
+    private int failedLoginAttempts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
