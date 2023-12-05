@@ -26,7 +26,6 @@ public class AccountsController {
     public ResponseEntity verifyRegisterationEmail() {
         return null;
     }
-
     @PostMapping("/register")
     public ResponseEntity register() {
         return null;
