@@ -2,9 +2,9 @@ package com.accountmicroservice.accounts.register;
 
 
 import com.accountmicroservice.accounts.register.requests.EmailVerificationRequest;
-
 import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.accounts.register.responses.RequestRegisterResponse;
+import com.accountmicroservice.accounts.register.responses.VerifyOtpResponse;
 import com.accountmicroservice.entities.OTP;
 import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.OtpRepository;
@@ -69,6 +69,8 @@ public class RegisterService {
 
     }
 
+
+
     public static String generateOTP(int length) {
         String numbers = "0123456789";
         Random rndm_method = new Random();
@@ -77,6 +79,44 @@ public class RegisterService {
             otp[i] = numbers.charAt(rndm_method.nextInt(numbers.length()));
         }
         return new String(otp);
+    }
+
+
+    public ResponseEntity verifyOtp(EmailVerificationRequest emailVerificationRequest) {
+        VerifyOtpResponse responseToClient = new VerifyOtpResponse();
+        OTP otpRecord =otpRepository.getRegisterationOtpByEmail(emailVerificationRequest.getEmail());
+        if(otpRecord == null){
+            responseToClient.setResponseCode("1");
+            responseToClient.setResponseStatus("Failed");
+            responseToClient.setResponseMessage("This e-mail does not exist");
+            return ResponseEntity.badRequest().body(responseToClient);
+        }
+        if(otpRecord.getOtp().equals(emailVerificationRequest.getOtp())){
+            if(otpRecord.getExpiryDate() != DateTimeFormatter.getCurrentDate() ||
+                    otpRecord.getExpiryTime() <= DateTimeFormatter.getCurrentTime()){
+                responseToClient.setResponseCode("1");
+                responseToClient.setResponseStatus("Failed");
+                responseToClient.setResponseMessage("OTP has expired");
+                return ResponseEntity.badRequest().body(responseToClient);
+            } else {
+                otpRepository.delete(otpRecord);
+                responseToClient.setSuccessful();
+                return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
+            }
+
+
+        } else if (!otpRecord.getOtp().equals(emailVerificationRequest.getOtp())) {
+            responseToClient.setResponseCode("1");
+            responseToClient.setResponseStatus("Failed");
+            responseToClient.setResponseMessage("OTP is incorrect");
+            return ResponseEntity.badRequest().body(responseToClient);
+        } else {
+            responseToClient.setResponseCode("1");
+            responseToClient.setResponseStatus("Failed");
+            responseToClient.setResponseMessage("OTP is incorrect");
+            return ResponseEntity.badRequest().body(responseToClient);
+
+        }
     }
 }
 

@@ -25,7 +25,7 @@ public class AccountsController {
     }
     @PostMapping("/verifyRegisterationEmail")
     public ResponseEntity verifyRegisterationEmail(@RequestBody @Valid EmailVerificationRequest emailVerificationRequest) {
-        return null;
+        return registerService.verifyOtp(emailVerificationRequest);
     }
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) {

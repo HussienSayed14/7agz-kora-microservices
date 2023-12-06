@@ -1,8 +1,6 @@
 package com.accountmicroservice.util;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class DateTimeFormatter {
@@ -29,8 +27,5 @@ public class DateTimeFormatter {
         String formattedTime = formatter.format(time);
         return Integer.parseInt(formattedTime);
     }
-    public static void main(String[] args) {
-        System.out.println(tenMinutesFromNow());
 
-    }
 }

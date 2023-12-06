@@ -1,5 +1,6 @@
 package com.accountmicroservice.util;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ public class GenericResponses {
     private String responseCode;
     private String responseMessage;
     private String  responseStatus;
+    @JsonIgnore
     private HttpStatus httpStatus;
     private int tranDate;
     private int tranTime;
