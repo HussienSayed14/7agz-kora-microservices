@@ -40,12 +40,10 @@ public class RegisterService {
         String otp = generateOTP(6);
 
         if(createRegisterRequestOtp(otpRequest.getEmail(), otp)){
-            responseToClient.setResponseCode("0");
-            responseToClient.setResponseStatus("Success");
-            responseToClient.setResponseMessage("OTP sent successfully");
-            emailService.sendEmail(otpRequest.getEmail(),"7agz Kora EMAIL VERIFICATION",
-                    "Please do not Share this OTP with anyone: " + otp + "\nThis OTP will expire in 10 minutes");
-            return ResponseEntity.ok().body(responseToClient);
+            responseToClient.setSuccessful();
+            String body = "Please do not Share this OTP with anyone: " + otp + "\nThis OTP will expire in 10 minutes";
+            emailService.sendEmail(otpRequest.getEmail(),"7agz Kora EMAIL VERIFICATION", body);
+            return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
         }
         return ResponseEntity.badRequest().body(responseToClient);
     }

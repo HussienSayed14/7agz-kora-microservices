@@ -2,9 +2,7 @@ package com.accountmicroservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
+
 
 @Entity
 @Table(name = "USER")
@@ -13,7 +11,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Builder
-public class User implements UserDetails {
+public class User {
 
     @Id
     @Column(name="EMAIL", unique = true)
@@ -53,34 +51,4 @@ public class User implements UserDetails {
     private int failedLoginAttempts;
     @Column(name = "LAST_LOGIN_DATE")
     private String lastLoginDate;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

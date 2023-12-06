@@ -1,12 +1,8 @@
 package com.accountmicroservice.accounts.register.responses;
 
+import com.accountmicroservice.util.GenericResponses;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class RequestRegisterResponse {
-    private String responseMessage;
-    private String responseCode;
-    private String responseStatus;
+public class RequestRegisterResponse extends GenericResponses {
 }
