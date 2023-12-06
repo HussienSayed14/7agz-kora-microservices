@@ -1,8 +1,9 @@
 package com.accountmicroservice.accounts.register;
 
 
-import com.accountmicroservice.accounts.register.requests.OtpRequest;
+import com.accountmicroservice.accounts.register.requests.EmailVerificationRequest;
 
+import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.accounts.register.responses.RequestRegisterResponse;
 import com.accountmicroservice.entities.OTP;
 import com.accountmicroservice.entities.User;
@@ -25,7 +26,7 @@ public class RegisterService {
     EmailService emailService;
 
 
-    public ResponseEntity registerRequest(OtpRequest otpRequest) {
+    public ResponseEntity registerRequest(GetOtpRequest otpRequest) {
         RequestRegisterResponse responseToClient = new RequestRegisterResponse();
         User existingUser = userRepository.findByEmail(otpRequest.getEmail());
 
