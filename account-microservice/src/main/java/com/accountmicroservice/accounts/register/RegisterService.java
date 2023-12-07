@@ -10,11 +10,10 @@ import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.OtpRepository;
 import com.accountmicroservice.repositories.UserRepository;
 import com.accountmicroservice.util.DateTimeFormatter;
-import com.accountmicroservice.util.emailSender.EmailService;
+import com.accountmicroservice.util.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.Random;
 
 @Service
 public class RegisterService {
@@ -31,13 +30,11 @@ public class RegisterService {
         User existingUser = userRepository.findByEmail(otpRequest.getEmail());
 
         if (existingUser != null) {
-            responseToClient.setResponseCode("1");
-            responseToClient.setResponseStatus("Failed");
-            responseToClient.setResponseMessage("This e-mail already exist");
+           responseToClient.setEmailAlreadyExist();
             return ResponseEntity.badRequest().body(responseToClient);
         }
 
-        String otp = generateOTP(6);
+        String otp = EmailService.generateOTP(6);
 
         if(createRegisterRequestOtp(otpRequest.getEmail(), otp)){
             responseToClient.setSuccessful();
@@ -71,32 +68,17 @@ public class RegisterService {
 
 
 
-    public static String generateOTP(int length) {
-        String numbers = "0123456789";
-        Random rndm_method = new Random();
-        char[] otp = new char[length];
-        for (int i = 0; i < length; i++) {
-            otp[i] = numbers.charAt(rndm_method.nextInt(numbers.length()));
-        }
-        return new String(otp);
-    }
-
-
     public ResponseEntity verifyOtp(EmailVerificationRequest emailVerificationRequest) {
         VerifyOtpResponse responseToClient = new VerifyOtpResponse();
         OTP otpRecord =otpRepository.getRegisterationOtpByEmail(emailVerificationRequest.getEmail());
         if(otpRecord == null){
-            responseToClient.setResponseCode("1");
-            responseToClient.setResponseStatus("Failed");
-            responseToClient.setResponseMessage("This e-mail does not exist");
+            responseToClient.setEmailNotFound();
             return ResponseEntity.badRequest().body(responseToClient);
         }
         if(otpRecord.getOtp().equals(emailVerificationRequest.getOtp())){
             if(otpRecord.getExpiryDate() != DateTimeFormatter.getCurrentDate() ||
                     otpRecord.getExpiryTime() <= DateTimeFormatter.getCurrentTime()){
-                responseToClient.setResponseCode("1");
-                responseToClient.setResponseStatus("Failed");
-                responseToClient.setResponseMessage("OTP has expired");
+                    responseToClient.setOtpExpired();
                 return ResponseEntity.badRequest().body(responseToClient);
             } else {
                 otpRepository.delete(otpRecord);
@@ -106,16 +88,11 @@ public class RegisterService {
 
 
         } else if (!otpRecord.getOtp().equals(emailVerificationRequest.getOtp())) {
-            responseToClient.setResponseCode("1");
-            responseToClient.setResponseStatus("Failed");
-            responseToClient.setResponseMessage("OTP is incorrect");
+           responseToClient.setWrongOtp();
             return ResponseEntity.badRequest().body(responseToClient);
         } else {
-            responseToClient.setResponseCode("1");
-            responseToClient.setResponseStatus("Failed");
-            responseToClient.setResponseMessage("OTP is incorrect");
+           responseToClient.setWrongOtp();
             return ResponseEntity.badRequest().body(responseToClient);
-
         }
     }
 }
