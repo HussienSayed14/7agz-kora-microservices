@@ -26,6 +26,14 @@ public class GenericResponses {
         this.tranTime = DateTimeFormatter.getCurrentTime();
     }
 
+    public void setServerErrorHappened(){
+        this.responseCode = "-1";
+        this.responseMessage = "Server error happened";
+        this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        this.responseStatus = "Falied";
+        this.tranDate = DateTimeFormatter.getCurrentDate();
+        this.tranTime = DateTimeFormatter.getCurrentTime();
+    }
     public void setEmailAlreadyExist(){
         this.responseCode = "1";
         this.responseMessage = "This E-mail already exists";

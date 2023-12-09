@@ -8,6 +8,7 @@ import com.accountmicroservice.accounts.register.requests.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,6 @@ public class AccountsController {
     private RegisterService registerService;
     @Autowired
     private LoginService loginService;
-
 
     @PostMapping("/registerRequest")
     public ResponseEntity registerRequest(@RequestBody @Valid GetOtpRequest otpRequest) {
@@ -29,7 +29,7 @@ public class AccountsController {
     }
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) {
-        return null;
+        return registerService.register(registerRequest);
     }
 
 }

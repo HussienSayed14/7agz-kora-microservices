@@ -30,7 +30,7 @@ public class User {
     @Column(name = "ROLE")
     private String role;
     @Column(name = "DATE_OF_BIRTH")
-    private String dateOfBirth;
+    private int dateOfBirth;
     @Column(name = "SECURITY_QUESTION")
     private String securityQuestion;
     @Column(name = "SECURITY_ANSWER")
@@ -44,11 +44,11 @@ public class User {
     @Column(name = "NATIONAL_ID")
     private String nationalId;
     @Column(name = "CREATATION_DATE")
-    private String creationDate;
+    private int creationDate;
     @Column(name = "CREATION_TIME")
-    private String creationTime;
+    private int creationTime;
     @Column(name = "FAILED_LOGIN_ATTEMPTS")
     private int failedLoginAttempts;
     @Column(name = "LAST_LOGIN_DATE")
-    private String lastLoginDate;
+    private int lastLoginDate;
 }
