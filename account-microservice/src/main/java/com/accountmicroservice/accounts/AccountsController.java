@@ -1,6 +1,7 @@
 package com.accountmicroservice.accounts;
 
 import com.accountmicroservice.accounts.login.LoginService;
+import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.register.RegisterService;
 import com.accountmicroservice.accounts.register.requests.EmailVerificationRequest;
 import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
@@ -30,6 +31,11 @@ public class AccountsController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) {
         return registerService.register(registerRequest);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest){
+        return loginService.login(loginRequest);
     }
 
 }

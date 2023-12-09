@@ -41,6 +41,8 @@ public class User {
     private boolean isVerified;
     @Column(name = "IS_ACTIVE")
     private boolean isActive;
+    @Column(name = "IS_LOCKED")
+    private boolean isLocked;
     @Column(name = "NATIONAL_ID")
     private String nationalId;
     @Column(name = "CREATATION_DATE")
