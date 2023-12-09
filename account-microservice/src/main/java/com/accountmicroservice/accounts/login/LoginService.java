@@ -31,6 +31,8 @@ public class LoginService {
                 responseToClient.setSuccessful();
                 //TODO: generate token
                 responseToClient.setToken(null);
+                user.setFailedLoginAttempts(0);
+                userRepository.save(user);
 
             } else {
                 if(reachedMaxFailAttempts(user, responseToClient)){
