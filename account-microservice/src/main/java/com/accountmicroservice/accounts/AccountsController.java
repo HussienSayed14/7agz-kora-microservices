@@ -1,5 +1,7 @@
 package com.accountmicroservice.accounts;
 
+import com.accountmicroservice.accounts.forgotPassword.ForgotPasswordService;
+import com.accountmicroservice.accounts.forgotPassword.requests.ForgotPasswordRequest;
 import com.accountmicroservice.accounts.login.LoginService;
 import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.register.RegisterService;
@@ -19,6 +21,8 @@ public class AccountsController {
     private RegisterService registerService;
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private ForgotPasswordService forgotPasswordService;
 
     @PostMapping("/registerRequest")
     public ResponseEntity registerRequest(@RequestBody @Valid GetOtpRequest otpRequest) {
@@ -36,6 +40,16 @@ public class AccountsController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest){
         return loginService.login(loginRequest);
+    }
+
+    @PostMapping("forgotPasswordRequest")
+    public ResponseEntity forgotPasswordRequest(@RequestBody GetOtpRequest request){
+        return forgotPasswordService.forgotPasswordRequest(request);
+    }
+
+    @PostMapping("forgotPassword")
+    public ResponseEntity forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        return forgotPasswordService.validateAndChangePassword(request, null);
     }
 
 }
