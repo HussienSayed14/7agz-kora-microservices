@@ -121,6 +121,8 @@ public class RegisterService {
                 .creationTime(DateTimeFormatter.getCurrentTime())
                 .failedLoginAttempts(0)
                 .lastLoginDate(DateTimeFormatter.getCurrentDate())
+                .lastLoginTime(DateTimeFormatter.getCurrentTime())
+                .lockRemovalDate(0)
                 .build();
         try {
             userRepository.save(user);

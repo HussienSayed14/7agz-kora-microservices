@@ -4,6 +4,7 @@ import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.login.responses.LoginResponse;
 import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.UserRepository;
+import com.accountmicroservice.util.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -37,6 +38,8 @@ public class LoginService {
             } else {
                 if(reachedMaxFailAttempts(user, responseToClient)){
                     user.setLocked(true);
+                    user.setLockRemovalDate(DateTimeFormatter.getCurrentDate());
+                    user.setLockRemovalTime(DateTimeFormatter.hoursFromNow(1));
                     userRepository.save(user);
                     return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
                 }
@@ -67,6 +70,10 @@ public class LoginService {
 
     private boolean isUserLocked(User user, LoginResponse responseToClient) {
         if(user.isLocked()){
+            if(user.getLockRemovalDate() > DateTimeFormatter.getCurrentDate()
+                    || user.getLockRemovalTime() >= DateTimeFormatter.getCurrentTime()){
+                return false;
+            }
             responseToClient.setUserIsLocked();
             return true;
         }

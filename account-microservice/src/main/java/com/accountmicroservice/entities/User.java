@@ -53,4 +53,10 @@ public class User {
     private int failedLoginAttempts;
     @Column(name = "LAST_LOGIN_DATE")
     private int lastLoginDate;
+    @Column(name = "LAST_LOGIN_TIME")
+    private int lastLoginTime;
+    @Column(name = "LOCK_REMOVAL_DATE")
+    private int lockRemovalDate;
+    @Column(name = "LOCK_REMOVAL_TIME")
+    private int lockRemovalTime;
 }
