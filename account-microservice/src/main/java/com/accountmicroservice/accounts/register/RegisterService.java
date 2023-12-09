@@ -1,6 +1,5 @@
 package com.accountmicroservice.accounts.register;
 
-
 import com.accountmicroservice.accounts.register.requests.EmailVerificationRequest;
 import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.accounts.register.responses.RequestRegisterResponse;
@@ -63,38 +62,45 @@ public class RegisterService {
         } catch (Exception e) {
             return false;
         }
-
     }
 
 
 
     public ResponseEntity verifyOtp(EmailVerificationRequest emailVerificationRequest) {
         VerifyOtpResponse responseToClient = new VerifyOtpResponse();
-        OTP otpRecord =otpRepository.getRegisterationOtpByEmail(emailVerificationRequest.getEmail());
-        if(otpRecord == null){
+        OTP otpRecord = otpRepository.getRegisterationOtpByEmail(emailVerificationRequest.getEmail());
+        if (otpRecord == null) {
             responseToClient.setEmailNotFound();
             return ResponseEntity.badRequest().body(responseToClient);
         }
-        if(otpRecord.getOtp().equals(emailVerificationRequest.getOtp())){
-            if(otpRecord.getExpiryDate() != DateTimeFormatter.getCurrentDate() ||
-                    otpRecord.getExpiryTime() <= DateTimeFormatter.getCurrentTime()){
-                    responseToClient.setOtpExpired();
-                return ResponseEntity.badRequest().body(responseToClient);
-            } else {
-                otpRepository.delete(otpRecord);
-                responseToClient.setSuccessful();
-                return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
-            }
 
-
-        } else if (!otpRecord.getOtp().equals(emailVerificationRequest.getOtp())) {
-           responseToClient.setWrongOtp();
-            return ResponseEntity.badRequest().body(responseToClient);
-        } else {
-           responseToClient.setWrongOtp();
-            return ResponseEntity.badRequest().body(responseToClient);
+        if (isOtpValid(otpRecord, responseToClient)
+                && isOtpCorrect(emailVerificationRequest.getOtp(), otpRecord, responseToClient)) {
+            otpRepository.delete(otpRecord);
+            responseToClient.setSuccessful();
+            return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
         }
+        return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
     }
+
+    private boolean isOtpValid(OTP otpRecord, VerifyOtpResponse responseToClient) {
+        if (otpRecord.getExpiryDate() != DateTimeFormatter.getCurrentDate() ||
+                otpRecord.getExpiryTime() >= DateTimeFormatter.getCurrentTime()) {
+            responseToClient.setOtpExpired();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isOtpCorrect(String userOtp, OTP originalOtp, VerifyOtpResponse responseToClient) {
+        if (originalOtp.getOtp().equals(userOtp)){
+            return true;
+        }
+        responseToClient.setWrongOtp();
+        return false;
+    }
+
+
 }
 
 
