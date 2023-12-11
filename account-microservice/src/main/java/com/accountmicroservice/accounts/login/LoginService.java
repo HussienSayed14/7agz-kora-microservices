@@ -33,14 +33,17 @@ public class LoginService {
                 && isUserActive(user, responseToClient)){
 
             if(isPasswordCorrect(user, loginRequest, responseToClient)) {
-                responseToClient.setSuccessful();
                 responseToClient.setToken(jwtService.generateToken(user));
-                user.setFailedLoginAttempts(0);
                 responseToClient.setFirstName(user.getFirstName());
                 responseToClient.setLastName(user.getLastName());
                 responseToClient.setRole(user.getRole());
-                userRepository.save(user);
 
+                System.out.println(jwtService.generateToken(user));
+                responseToClient.setSuccessful();
+                user.setFailedLoginAttempts(0);
+                userRepository.save(user);
+                System.out.println("successs");
+                return ResponseEntity.ok().body(responseToClient);
             } else {
                 if(reachedMaxFailAttempts(user, responseToClient)){
                     user.setLocked(true);

@@ -16,9 +16,6 @@ public class RegisterRequest {
     private String securityQuestion;
     private String securityAnswer;
     private String nationalId;
-    private int creationDate;
-    private int creationTime;
-    private int failedLoginAttempts;
-    private int lastLoginDate;
+
 
 }

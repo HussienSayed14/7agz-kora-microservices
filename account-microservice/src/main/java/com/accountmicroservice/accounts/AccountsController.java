@@ -46,7 +46,7 @@ public class AccountsController {
         return forgotPasswordService.forgotPasswordRequest(request);
     }
 
-    @PostMapping("forgotPassword")
+    @PostMapping("/forgotPassword")
     public ResponseEntity forgotPassword(@RequestBody ForgotPasswordRequest request) {
         return forgotPasswordService.validateAndChangePassword(request, null);
     }
