@@ -29,6 +29,7 @@ public class JwtServiceImp {
         // Add custom claims
         claims.put("firstName", user.getFirstName());
         claims.put("lastName", user.getLastName());
+        claims.put("role", user.getRole());
 
         return Jwts.builder().setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -44,7 +45,11 @@ public class JwtServiceImp {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public String extractEmail(String token) {
