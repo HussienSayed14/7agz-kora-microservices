@@ -4,6 +4,8 @@ import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.login.responses.LoginResponse;
 import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.UserRepository;
+import com.accountmicroservice.security.JwtService;
+import com.accountmicroservice.security.JwtServiceImp;
 import com.accountmicroservice.util.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,9 @@ public class LoginService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    JwtServiceImp jwtService;
+
     public ResponseEntity login(LoginRequest loginRequest) {
         LoginResponse responseToClient = new LoginResponse();
         User user = userRepository.findByEmail(loginRequest.getEmail());
@@ -30,9 +35,11 @@ public class LoginService {
 
             if(isPasswordCorrect(user, loginRequest, responseToClient)) {
                 responseToClient.setSuccessful();
-                //TODO: generate token
-                responseToClient.setToken(null);
+                responseToClient.setToken(jwtService.generateToken(user));
                 user.setFailedLoginAttempts(0);
+                responseToClient.setFirstName(user.getFirstName());
+                responseToClient.setLastName(user.getLastName());
+                responseToClient.setRole(user.getRole());
                 userRepository.save(user);
 
             } else {
