@@ -5,7 +5,6 @@ import com.accountmicroservice.accounts.login.responses.LoginResponse;
 import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.UserRepository;
 import com.accountmicroservice.security.JwtService;
-import com.accountmicroservice.security.JwtServiceImp;
 import com.accountmicroservice.util.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ public class LoginService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    JwtServiceImp jwtService;
+    JwtService jwtService;
 
     public ResponseEntity login(LoginRequest loginRequest) {
         LoginResponse responseToClient = new LoginResponse();
