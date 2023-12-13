@@ -95,6 +95,13 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    public boolean isTokenValid(String token) {
+        if(token == null || token.isEmpty()){
+            return false;
+        }
+        return !isTokenExpired(token);
+    }
+
 
 
 
