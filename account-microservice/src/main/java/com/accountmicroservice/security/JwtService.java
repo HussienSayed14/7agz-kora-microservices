@@ -30,12 +30,30 @@ public class JwtService {
         // Add custom claims
         claims.put("firstName", user.getFirstName());
         claims.put("lastName", user.getLastName());
+        claims.put("email", user.getEmail());
         claims.put("role", user.getRole());
 
         return Jwts.builder().setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 8))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateForgotPasswordToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+
+        // Add custom claims
+        claims.put("firstName", user.getFirstName());
+        claims.put("lastName", user.getLastName());
+        claims.put("email", user.getEmail());
+        claims.put("role", user.getRole());
+
+        return Jwts.builder().setSubject(user.getEmail())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setClaims(claims)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -54,12 +72,11 @@ public class JwtService {
     }
 
     public String extractEmail(String token) {
-        return extractClaim(token, Claims::getSubject);
+        final Claims claims = extractAllClaims(token);
+        String email = (String) claims.get("email");
+        return email;
     }
 
-//    public String extractFirstName(String token) {
-//        return extractClaim(token, claims -> (String) claims.get("firstName"));
-//    }
 
     public String extractFirstName(String token) {
         final Claims claims = extractAllClaims(token);
