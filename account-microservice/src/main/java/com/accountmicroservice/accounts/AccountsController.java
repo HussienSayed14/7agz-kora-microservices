@@ -38,6 +38,7 @@ public class AccountsController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest){
+        System.out.println("login request: " + loginRequest.getEmail());
         return loginService.login(loginRequest);
     }
 

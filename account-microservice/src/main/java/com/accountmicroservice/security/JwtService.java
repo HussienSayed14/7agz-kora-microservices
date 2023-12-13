@@ -6,10 +6,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -97,16 +95,6 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails, HttpServletResponse response){
-        final String email = extractEmail(token);
-
-        if ( !( (email.equals(userDetails.getUsername()))) ){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
-        }
-
-        return true;
-    }
 
 
 
