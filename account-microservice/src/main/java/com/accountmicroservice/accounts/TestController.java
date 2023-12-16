@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/accounts/test")
+@RequestMapping("/accounts")
 public class TestController {
 
     @Autowired
     JwtService jwtService;
-    @GetMapping("/testHello")
+    @GetMapping("/test")
     String test(){
-          return "test Service";
+          return "Hello from Accounts Microservice";
     }
 }
