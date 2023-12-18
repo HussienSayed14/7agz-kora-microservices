@@ -55,7 +55,7 @@ function Login() {
           <MDBCheckbox id='form1Example3' label='Remember me' defaultChecked />
         </MDBCol>
         <MDBCol>
-          <a href='#!'>Forgot password?</a>
+          <a href='/forgotPasswordRequest'>Forgot password?</a>
         </MDBCol>
       </MDBRow>
 
