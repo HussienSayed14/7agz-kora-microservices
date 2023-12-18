@@ -1,5 +1,15 @@
 import React from 'react';
-import {useState} from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+    MDBInput,
+    MDBCol,
+    MDBRow,
+    MDBCheckbox,
+    MDBBtn
+  } from 'mdb-react-ui-kit';
+  import { useState } from 'react';
+  import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+
 import './Login.css'
 
 
@@ -18,7 +28,7 @@ function Login() {
  
     const handleLogin = e =>{
         e.preventDefault();
-        if( email == "" || password == ""){
+        if( email === "" || password === ""){
             console.log("Error");
             window.alert("Please enter Email and Password!")
         }else{
@@ -35,22 +45,23 @@ function Login() {
 
   
   return (
-    <div class="login-form">
-    <form>
-      <h1>Login</h1>
-      <div class="content">
-        <div class="input-field">
-          <input onChange={handleEmailChange} type="email" placeholder="Email" autocomplete="nope"/>
-        </div>
-        <div class="input-field">
-          <input onChange={handlePasswordChange} type="password" placeholder="Password" autocomplete="new-password"/>
-        </div>
-        <a href="#" class="link">Forgot Your Password?</a>
-      </div>
-      <div class="action">
-        <button>Register</button>
-        <button onClick={handleLogin}>Sign in</button>
-      </div>
+    <div className="login-container">
+    <form className="login-form">
+      <MDBInput onChange={handleEmailChange} className='mb-4 email-field' type='email' id='form1Example1' label='Email address' />
+      <MDBInput onChange={handlePasswordChange} className='mb-4' type='password' id='form1Example2' label='Password' />
+
+      <MDBRow className='mb-4'>
+        <MDBCol className='d-flex justify-content-center'>
+          <MDBCheckbox id='form1Example3' label='Remember me' defaultChecked />
+        </MDBCol>
+        <MDBCol>
+          <a href='#!'>Forgot password?</a>
+        </MDBCol>
+      </MDBRow>
+
+      <MDBBtn onClick={handleLogin} type='submit' block>
+        Sign in
+      </MDBBtn>
     </form>
   </div>
   );
