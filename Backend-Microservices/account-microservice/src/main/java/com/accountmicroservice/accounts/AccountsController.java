@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/accounts/api/v1")
+@CrossOrigin(origins = "*")
 @Tag(name = "Accounts", description = "The Accounts API")
 public class AccountsController {
     @Autowired
@@ -28,6 +29,7 @@ public class AccountsController {
 
     @Operation(summary = "Create User Register Request", description = "When a user wants to register, they send their email and receive an OTP to verify their email.")
     @PostMapping("/registerRequest")
+    @CrossOrigin(origins = "*")
     public ResponseEntity registerRequest(@RequestBody @Valid GetOtpRequest otpRequest) {
         return registerService.registerRequest(otpRequest);
     }

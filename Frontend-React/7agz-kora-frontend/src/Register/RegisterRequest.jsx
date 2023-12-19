@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from "axios";
 import {
     MDBInput,
     MDBBtn
@@ -12,6 +13,9 @@ import './Register.css'
 
 function RegisterRequest() {
     const [email, setEmail] = useState('');
+
+    const baseUrl = "http://localhost:8000/accounts/api/v1"
+
 
 
     const handleEmailChange = e =>{
@@ -31,7 +35,16 @@ function RegisterRequest() {
             email: email
         }
          console.log(registerRequestObj);
-         window.location='/optVerify'
+         axios
+            .post(
+                `${baseUrl}/registerRequest`,
+                { registerRequestObj }
+            )
+            .then((res) => {
+                console.log(res);
+                console.log(res.data);
+            }).catch((err) => {console.log(err)});
+         //window.location='/optVerify'
     }
     };
 
