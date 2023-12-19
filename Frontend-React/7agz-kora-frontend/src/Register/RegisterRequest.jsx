@@ -42,7 +42,10 @@ function RegisterRequest() {
             .then((res) => {
                 console.log(res);
                 console.log(res.data);
-            }).catch((err) => {console.log(err)});
+            }).catch((err) => {
+                console.log(err.message)
+                
+            });
          //window.location='/optVerify'
     }
     };
