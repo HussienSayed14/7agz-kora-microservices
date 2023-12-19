@@ -58,8 +58,13 @@ public class RegisterService {
                 .expiryTime(DateTimeFormatter.tenMinutesFromNow())
                 .expiryDate(DateTimeFormatter.getCurrentDate())
                 .build();
+        OTP foundOtp = otpRepository.getRegisterationOtpByEmail(email);
+        if (foundOtp != null) {
+            otpRepository.delete(foundOtp);
+        }
 
         try {
+
             otpRepository.save(otpRecord);
             return true;
         } catch (Exception e) {

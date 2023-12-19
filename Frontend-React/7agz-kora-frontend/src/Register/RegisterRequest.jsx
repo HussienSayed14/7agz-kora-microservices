@@ -37,8 +37,7 @@ function RegisterRequest() {
          console.log(registerRequestObj);
          axios
             .post(
-                `${baseUrl}/registerRequest`,
-                { registerRequestObj }
+                `${baseUrl}/registerRequest`,registerRequestObj 
             )
             .then((res) => {
                 console.log(res);
