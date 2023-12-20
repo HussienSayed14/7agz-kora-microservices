@@ -52,7 +52,6 @@ public class AccountsController {
     @Operation(summary = "Login", description = "Login with the given email and password.")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest){
-        System.out.println("login request: " + loginRequest.getEmail());
         return loginService.login(loginRequest);
     }
 
