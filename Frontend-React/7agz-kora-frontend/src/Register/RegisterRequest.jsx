@@ -3,7 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import {
     MDBInput,
-    MDBBtn
+    MDBBtn,
+    MDBSpinner
   } from 'mdb-react-ui-kit';
   import { useState } from 'react';
   import 'mdb-react-ui-kit/dist/css/mdb.min.css';
@@ -13,6 +14,7 @@ import './Register.css'
 
 function RegisterRequest() {
     const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const baseUrl = "http://localhost:8000/accounts/api/v1"
 
@@ -34,26 +36,37 @@ function RegisterRequest() {
         var registerRequestObj = {
             email: email
         }
-         console.log(registerRequestObj);
-         axios
-            .post(
-                `${baseUrl}/registerRequest`,registerRequestObj 
-            )
+
+        setLoading(true);
+         axios.post(`${baseUrl}/registerRequest`,registerRequestObj)
             .then((res) => {
-                console.log(res);
                 console.log(res.data);
+                if(res.data.responseCode === "0"){
+                  sessionStorage.setItem("email",email)
+                  window.location='/optVerify'
+
+                }
             }).catch((err) => {
-                console.log(err.message)
+                console.log(err.response.data)
+                setLoading(false)
+
                 
             });
-         //window.location='/optVerify'
+        
     }
     };
 
+    if(loading){
+      return(
+        <div className='loading-icon-div'>
+      <MDBSpinner className='loading-icon' color='primary'>
+      <span className='visually-hidden'>Loading...</span>
+    </MDBSpinner>
+    </div>
+    )
+    }
 
-
-  
-  return (
+ return (
     <div className="login-container">
     <form className="login-form">
     <h4 className='mb-3'>Forgot Password</h4>

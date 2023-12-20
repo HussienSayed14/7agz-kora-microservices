@@ -37,7 +37,7 @@ public class GenericResponses {
     public void setEmailAlreadyExist(){
         this.responseCode = "1";
         this.responseMessage = "This E-mail already exists";
-        this.httpStatus = HttpStatus.OK;
+        this.httpStatus = HttpStatus.UNAUTHORIZED;
         this.responseStatus = "Falied";
         this.tranDate = DateTimeFormatter.getCurrentDate();
         this.tranTime = DateTimeFormatter.getCurrentTime();
@@ -46,7 +46,7 @@ public class GenericResponses {
     public void setEmailNotFound(){
         this.responseCode = "2";
         this.responseMessage = "This e-mail is not found please try again";
-        this.httpStatus = HttpStatus.OK;
+        this.httpStatus = HttpStatus.BAD_REQUEST;
         this.responseStatus = "Falied";
         this.tranDate = DateTimeFormatter.getCurrentDate();
         this.tranTime = DateTimeFormatter.getCurrentTime();
@@ -55,7 +55,7 @@ public class GenericResponses {
     public void setOtpExpired(){
         this.responseCode = "3";
         this.responseMessage = "This OTP is expired";
-        this.httpStatus = HttpStatus.OK;
+        this.httpStatus = HttpStatus.UNAUTHORIZED;
         this.responseStatus = "Falied";
         this.tranDate = DateTimeFormatter.getCurrentDate();
         this.tranTime = DateTimeFormatter.getCurrentTime();
@@ -64,7 +64,7 @@ public class GenericResponses {
     public void setWrongOtp(){
         this.responseCode = "4";
         this.responseMessage = "Wrong OTP";
-        this.httpStatus = HttpStatus.OK;
+        this.httpStatus = HttpStatus.UNAUTHORIZED;
         this.responseStatus = "Falied";
         this.tranDate = DateTimeFormatter.getCurrentDate();
         this.tranTime = DateTimeFormatter.getCurrentTime();

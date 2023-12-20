@@ -33,7 +33,7 @@ public class AccountsController {
         return registerService.registerRequest(otpRequest);
     }
     @Operation(summary = "Verify Registeration Email", description = "Verify that the OTP sent to the user is correct.")
-    @PostMapping("/verifyRegisterationEmail")
+    @PostMapping("/verifyOtp")
     public ResponseEntity verifyRegisterationEmail(@RequestBody @Valid EmailVerificationRequest emailVerificationRequest) {
         return registerService.verifyOtp(emailVerificationRequest);
     }
@@ -43,12 +43,21 @@ public class AccountsController {
         return registerService.register(registerRequest);
     }
 
+
+
+
+
+
+
     @Operation(summary = "Login", description = "Login with the given email and password.")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest){
         System.out.println("login request: " + loginRequest.getEmail());
         return loginService.login(loginRequest);
     }
+
+
+
 
     @Operation(summary = "Forgot Password Request", description = "When a user forgets their password, they send their email and receive an OTP to verify their email.")
     @PostMapping("forgotPasswordRequest")
