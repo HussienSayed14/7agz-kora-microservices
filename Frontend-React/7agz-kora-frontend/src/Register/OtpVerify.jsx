@@ -7,17 +7,19 @@ import {
   } from 'mdb-react-ui-kit';
   import { useState } from 'react';
   import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+  import axios from "axios";
 
 import './Register.css'
 
 
 function OtpVerify() {
-    const [email, setEmail] = useState('');
+    
+  const [email,setEmail] = useState(sessionStorage.getItem("email"));
     const [otp, setOtp] = useState('');
 
 
     const handleOtpChange = e =>{
-        setEmail(e.target.value);
+        setOtp(e.target.value);
     };
  
 
@@ -33,8 +35,20 @@ function OtpVerify() {
             email: email,
             otp: otp
         }
-         console.log(otpVerifyObj);
-         //window.location='/register'
+        const baseUrl = "http://localhost:8000/accounts/api/v1"
+
+        axios.post(`${baseUrl}/verifyOtp`,otpVerifyObj)
+            .then((res) => {
+                console.log(res.data);
+                if(res.data.responseCode === "0"){
+                  sessionStorage.setItem("email",email)
+                  //window.location='/optVerify'
+                }
+            }).catch((err) => {
+              console.log(err.response.data)
+                
+            });
+         
     }
     };
 
@@ -49,7 +63,7 @@ function OtpVerify() {
      We have sent otp to your mail.
     </MDBTypography>
 
-      <MDBInput onChange={handleOtpChange} className='mb-4 email-field' type='email' id='form1Example1' label='Email address' />
+      <MDBInput onChange={handleOtpChange} className='mb-4 email-field' type='email' id='form1Example1' label='Otp' />
 
      <MDBBtn onClick={handleSubmit} type='submit' block>
         Submit
