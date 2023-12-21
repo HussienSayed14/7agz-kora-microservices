@@ -10,18 +10,19 @@ import com.accountmicroservice.repositories.UserRepository;
 import com.accountmicroservice.util.DateTimeFormatter;
 import com.accountmicroservice.util.EmailService;
 import com.accountmicroservice.util.GenericResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ForgotPasswordService {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    OtpRepository otpRepository;
-    @Autowired
-    EmailService emailService;
+
+    private final UserRepository userRepository;
+
+    private final OtpRepository otpRepository;
+
+    private final EmailService emailService;
 
     public ResponseEntity forgotPasswordRequest(GetOtpRequest otpRequest){
         String otp = EmailService.generateOTP(6);
