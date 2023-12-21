@@ -16,8 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/accounts/api/v1")
-//@CrossOrigin(origins = "*")
+@RequestMapping("/accounts/api/v1/auth")
 @Tag(name = "Accounts", description = "The Accounts API")
 public class AccountsController {
     @Autowired

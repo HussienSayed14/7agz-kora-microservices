@@ -6,18 +6,18 @@ import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.UserRepository;
 import com.accountmicroservice.security.JwtService;
 import com.accountmicroservice.util.DateTimeFormatter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class LoginService {
 
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    JwtService jwtService;
+
+    private final UserRepository userRepository;
 
     public ResponseEntity login(LoginRequest loginRequest) {
         LoginResponse responseToClient = new LoginResponse();
@@ -33,12 +33,12 @@ public class LoginService {
                 && isUserActive(user, responseToClient)){
 
             if(isPasswordCorrect(user, loginRequest, responseToClient)) {
-                responseToClient.setToken(jwtService.generateToken(user));
+               // responseToClient.setToken(jwtService.generateToken(user));
                 responseToClient.setFirstName(user.getFirstName());
                 responseToClient.setLastName(user.getLastName());
                 responseToClient.setRole(user.getRole());
 
-                System.out.println(jwtService.generateToken(user));
+                //System.out.println(jwtService.generateToken(user));
                 responseToClient.setSuccessful();
                 user.setFailedLoginAttempts(0);
                 userRepository.save(user);

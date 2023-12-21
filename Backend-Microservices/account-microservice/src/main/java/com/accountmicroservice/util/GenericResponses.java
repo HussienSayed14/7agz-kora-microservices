@@ -37,7 +37,7 @@ public class GenericResponses {
     public void setEmailAlreadyExist(){
         this.responseCode = "1";
         this.responseMessage = "This E-mail already exists";
-        this.httpStatus = HttpStatus.UNAUTHORIZED;
+        this.httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
         this.responseStatus = "Falied";
         this.tranDate = DateTimeFormatter.getCurrentDate();
         this.tranTime = DateTimeFormatter.getCurrentTime();
