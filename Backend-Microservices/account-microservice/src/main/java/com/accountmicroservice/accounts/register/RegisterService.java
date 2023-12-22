@@ -114,7 +114,7 @@ public class RegisterService {
                 .lastName(registerRequest.getLastName())
                 .password(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt(10)))
                 .phoneNumber(registerRequest.getPhoneNumber())
-                .role("User")
+                .role("USER")
                 .dateOfBirth(registerRequest.getDateOfBirth())
                 .securityQuestion(registerRequest.getSecurityQuestion())
                 .securityAnswer(registerRequest.getSecurityAnswer())
