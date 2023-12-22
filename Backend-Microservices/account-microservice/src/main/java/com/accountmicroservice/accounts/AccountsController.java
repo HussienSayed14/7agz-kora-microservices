@@ -70,4 +70,10 @@ public class AccountsController {
     }
 
 
+    @GetMapping("/hello")
+    public String hello(){
+        return "Hello World UnAuthenticated";
+    }
+
+
 }
