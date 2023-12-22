@@ -14,7 +14,7 @@ import com.accountmicroservice.util.EmailService;
 import com.accountmicroservice.util.GenericResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,6 +26,7 @@ public class RegisterService {
     private final OtpRepository otpRepository;
 
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
 
     public ResponseEntity registerRequest(GetOtpRequest otpRequest) {
@@ -112,7 +113,7 @@ public class RegisterService {
                 .email(registerRequest.getEmail())
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
-                .password(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt(10)))
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .role("USER")
                 .dateOfBirth(registerRequest.getDateOfBirth())

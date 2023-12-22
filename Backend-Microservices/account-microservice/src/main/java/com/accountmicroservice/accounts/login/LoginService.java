@@ -7,7 +7,7 @@ import com.accountmicroservice.repositories.UserRepository;
 import com.accountmicroservice.util.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +16,7 @@ public class LoginService {
 
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public ResponseEntity login(LoginRequest loginRequest) {
         LoginResponse responseToClient = new LoginResponse();
@@ -85,9 +86,10 @@ public class LoginService {
     }
 
     private boolean isPasswordCorrect(User user, LoginRequest loginRequest, LoginResponse responseToClient) {
-        if(BCrypt.checkpw(loginRequest.getPassword(), user.getPassword())){
+        if(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
             return true;
         }
+        responseToClient.setWrongPassword();
         return false;
     }
 
@@ -96,6 +98,7 @@ public class LoginService {
             responseToClient.setUserIsLocked();
             return true;
         }
+
         return false;
     }
 }
