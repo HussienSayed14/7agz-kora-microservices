@@ -8,4 +8,7 @@ public interface OtpRepository extends JpaRepository<OTP, Long>{
 
     @Query(value = "SELECT r from OTP r WHERE r.email = :email AND r.otpType = 'Register'")
     OTP getRegisterationOtpByEmail(String email);
+
+    @Query(value = "SELECT r from OTP r WHERE r.email = :email AND r.otpType = 'ForgotPassword'")
+    OTP getForgotPasswordOtpByEmail(String email);
 }

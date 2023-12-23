@@ -115,6 +115,15 @@ public class GenericResponses {
         this.tranTime = DateTimeFormatter.getCurrentTime();
     }
 
+    public void setOtpNotFound(){
+        this.responseCode = "10";
+        this.responseMessage = "Forgot Password request not found";
+        this.httpStatus = HttpStatus.UNAUTHORIZED;
+        this.responseStatus = "Falied";
+        this.tranDate = DateTimeFormatter.getCurrentDate();
+        this.tranTime = DateTimeFormatter.getCurrentTime();
+    }
+
 
 
 }

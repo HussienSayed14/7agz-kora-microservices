@@ -2,6 +2,7 @@ package com.accountmicroservice.accounts.login;
 
 import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.login.responses.LoginResponse;
+import com.accountmicroservice.config.JwtService;
 import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.UserRepository;
 import com.accountmicroservice.util.DateTimeFormatter;
@@ -17,6 +18,7 @@ public class LoginService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public ResponseEntity login(LoginRequest loginRequest) {
         LoginResponse responseToClient = new LoginResponse();
@@ -32,11 +34,11 @@ public class LoginService {
                 && isUserActive(user, responseToClient)){
 
             if(isPasswordCorrect(user, loginRequest, responseToClient)) {
-               // responseToClient.setToken(jwtService.generateToken(user));
                 responseToClient.setFirstName(user.getFirstName());
                 responseToClient.setLastName(user.getLastName());
                 responseToClient.setRole(user.getRole());
                 responseToClient.setSuccessful();
+                responseToClient.setToken(jwtService.generateToken(user));
                 user.setFailedLoginAttempts(0);
                 userRepository.save(user);
                 return ResponseEntity.ok().body(responseToClient);
