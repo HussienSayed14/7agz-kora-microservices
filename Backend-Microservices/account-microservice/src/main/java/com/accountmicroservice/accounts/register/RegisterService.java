@@ -1,9 +1,7 @@
 package com.accountmicroservice.accounts.register;
 
 import com.accountmicroservice.accounts.register.requests.EmailVerificationRequest;
-import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.accounts.register.requests.RegisterRequest;
-import com.accountmicroservice.accounts.register.responses.RequestRegisterResponse;
 import com.accountmicroservice.accounts.register.responses.VerifyOtpResponse;
 import com.accountmicroservice.entities.OTP;
 import com.accountmicroservice.entities.User;
