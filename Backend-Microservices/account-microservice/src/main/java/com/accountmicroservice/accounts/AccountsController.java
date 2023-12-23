@@ -27,11 +27,7 @@ public class AccountsController {
 
 
 
-    @Operation(summary = "Create User Register Request", description = "This Api is used to send an OTP to the user's email to verify it.")
-    @PostMapping("/registerRequest")
-    public ResponseEntity registerRequest(@RequestBody @Valid GetOtpRequest otpRequest) {
-        return registerService.registerRequest(otpRequest);
-    }
+
     @Operation(summary = "Verify Registeration Email", description = "Verify the OTP sent to the user's email.")
     @PostMapping("/verifyOtp")
     public ResponseEntity verifyOtp(@RequestBody @Valid EmailVerificationRequest emailVerificationRequest) {
@@ -44,8 +40,8 @@ public class AccountsController {
     }
     @Operation(summary = "Resend OTP", description = "This Api is used to resend the OTP to the user's email.")
     @PostMapping("/resendOtp")
-    public ResponseEntity resendRegisterationOtp(@RequestBody @Valid GetOtpRequest otpRequest) {
-        return registerService.registerRequest(otpRequest);
+    public void resendRegisterationOtp(@RequestBody @Valid GetOtpRequest otpRequest) {
+         registerService.createEmailVerificationOtp(otpRequest.getEmail());
     }
 
 

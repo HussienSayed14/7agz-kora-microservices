@@ -29,23 +29,14 @@ public class RegisterService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public ResponseEntity registerRequest(GetOtpRequest otpRequest) {
-        RequestRegisterResponse responseToClient = new RequestRegisterResponse();
-        User existingUser = userRepository.findByEmail(otpRequest.getEmail());
+    public void createEmailVerificationOtp(String email) {
+
         String otp = EmailService.generateOTP(6);
-
-        if (existingUser != null) {
-            responseToClient.setEmailAlreadyExist();
-            return ResponseEntity.badRequest().body(responseToClient);
-        }
-
-        if(createRegisterRequestOtp(otpRequest.getEmail(), otp)){
+        if(createRegisterRequestOtp(email, otp)){
             String body = "Please do not Share this OTP with anyone: " + otp + "\nThis OTP will expire in 10 minutes";
-            emailService.sendEmail(otpRequest.getEmail(),"7agz Kora EMAIL VERIFICATION", body);
-            responseToClient.setSuccessful();
-            return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
+            emailService.sendEmail(email,"7agz Kora EMAIL VERIFICATION", body);
         }
-        return ResponseEntity.badRequest().body(responseToClient);
+
     }
 
     private boolean createRegisterRequestOtp(String email, String otp) {
@@ -109,6 +100,13 @@ public class RegisterService {
 
     public ResponseEntity register(RegisterRequest registerRequest) {
         GenericResponses responseToClient = new GenericResponses();
+        User existingUser = userRepository.findByEmail(registerRequest.getEmail());
+
+        if (existingUser != null) {
+            responseToClient.setEmailAlreadyExist();
+            return ResponseEntity.badRequest().body(responseToClient);
+        }
+
         User user = User.builder()
                 .email(registerRequest.getEmail())
                 .firstName(registerRequest.getFirstName())
@@ -132,6 +130,7 @@ public class RegisterService {
                 .build();
         try {
             userRepository.save(user);
+            createEmailVerificationOtp(user.getEmail());
             responseToClient.setSuccessful();
             return ResponseEntity.ok().body(responseToClient);
         } catch (Exception e) {
