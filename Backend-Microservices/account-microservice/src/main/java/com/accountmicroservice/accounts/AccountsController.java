@@ -1,7 +1,6 @@
 package com.accountmicroservice.accounts;
 
-import com.accountmicroservice.accounts.forgotPassword.ForgotPasswordService;
-import com.accountmicroservice.accounts.forgotPassword.requests.ForgotPasswordRequest;
+
 import com.accountmicroservice.accounts.login.LoginService;
 import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.register.RegisterService;
@@ -10,6 +9,7 @@ import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.accounts.register.requests.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -53,8 +53,11 @@ public class AccountsController {
 
     @Operation(summary = "Login", description = "This Api is used to login a user and return a JWT token.")
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest){
-        return loginService.login(loginRequest);
+    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest,HttpServletRequest request) {
+        return loginService.login(loginRequest,request);
     }
+
+
+
 
 }

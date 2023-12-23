@@ -3,9 +3,12 @@ package com.accountmicroservice.accounts.login;
 import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.login.responses.LoginResponse;
 import com.accountmicroservice.config.JwtService;
+import com.accountmicroservice.entities.LoginAudit;
 import com.accountmicroservice.entities.User;
+import com.accountmicroservice.repositories.LoginAuditRepository;
 import com.accountmicroservice.repositories.UserRepository;
 import com.accountmicroservice.util.DateTimeFormatter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,8 +22,9 @@ public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final LoginAuditRepository loginAuditRepository;
 
-    public ResponseEntity login(LoginRequest loginRequest) {
+    public ResponseEntity login(LoginRequest loginRequest,HttpServletRequest request) {
         LoginResponse responseToClient = new LoginResponse();
         User user = userRepository.findByEmail(loginRequest.getEmail());
 
@@ -37,18 +41,17 @@ public class LoginService {
                 responseToClient.setFirstName(user.getFirstName());
                 responseToClient.setLastName(user.getLastName());
                 responseToClient.setRole(user.getRole());
-                responseToClient.setSuccessful();
                 responseToClient.setToken(jwtService.generateToken(user));
                 user.setFailedLoginAttempts(0);
                 userRepository.save(user);
-                return ResponseEntity.ok().body(responseToClient);
+                responseToClient.setSuccessful();
+
             } else {
                 if(reachedMaxFailAttempts(user, responseToClient)){
                     user.setLocked(true);
                     user.setLockRemovalDate(DateTimeFormatter.getCurrentDate());
                     user.setLockRemovalTime(DateTimeFormatter.hoursFromNow(1));
                     userRepository.save(user);
-                    return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
                 }
                 responseToClient.setWrongPassword();
                 user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
@@ -56,6 +59,7 @@ public class LoginService {
             }
         }
 
+        createLoginAudit(user, responseToClient,request.getRemoteAddr(),request.getHeader("User-Agent"));
         return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
     }
 
@@ -103,4 +107,34 @@ public class LoginService {
 
         return false;
     }
+
+    private void createLoginAudit(User user,LoginResponse responseToClient, String ipAddress, String userAgent) {
+        LoginAudit loginAudit = LoginAudit.builder()
+                .userEmail(user.getEmail())
+                .ipAddress(ipAddress)
+                .loginUserAgent(userAgent)
+                .loginStatus(responseToClient.getResponseStatus())
+                .loginMessage(responseToClient.getResponseMessage())
+                .loginDate(DateTimeFormatter.getCurrentDate())
+                .loginTime(DateTimeFormatter.getCurrentTime())
+                .build();
+
+        try {
+            loginAuditRepository.save(loginAudit);
+        } catch (Exception e){
+            System.out.println("Error Saving Login Audit");
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
 }
