@@ -31,6 +31,10 @@ public class RegisterService {
 
     public void createEmailVerificationOtp(String email) {
 
+        User user = userRepository.findByEmail(email);
+        if(user.isVerified()){
+            return;
+        }
         String otp = EmailService.generateOTP(6);
         if(createRegisterRequestOtp(email, otp)){
             String body = "Please do not Share this OTP with anyone: " + otp + "\nThis OTP will expire in 10 minutes";
