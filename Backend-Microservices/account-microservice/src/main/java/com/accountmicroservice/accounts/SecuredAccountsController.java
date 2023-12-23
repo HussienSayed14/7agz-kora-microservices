@@ -28,8 +28,4 @@ public class SecuredAccountsController {
         return forgotPasswordService.validateAndChangePassword(request, null);
     }
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello World Auth";
-    }
 }

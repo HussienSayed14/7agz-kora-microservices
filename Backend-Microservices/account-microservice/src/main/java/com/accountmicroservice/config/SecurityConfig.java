@@ -22,7 +22,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authrize) -> authrize
-                .requestMatchers("/accounts/api/v1/auth/**").permitAll()
+                .requestMatchers("/accounts/api/v1/auth/**",
+                        "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
         )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

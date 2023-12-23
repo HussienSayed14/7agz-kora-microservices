@@ -51,19 +51,10 @@ public class AccountsController {
 
 
 
-
     @Operation(summary = "Login", description = "This Api is used to login a user and return a JWT token.")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest){
         return loginService.login(loginRequest);
     }
-
-
-
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello World UnAuthenticated";
-    }
-
 
 }
