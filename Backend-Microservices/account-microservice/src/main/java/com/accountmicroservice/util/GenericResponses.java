@@ -125,5 +125,12 @@ public class GenericResponses {
     }
 
 
-
+    public void setUserNotVerified() {
+        this.responseCode = "11";
+        this.responseMessage = "This Email is not verified yet, please verify your email first";
+        this.httpStatus = HttpStatus.UNAUTHORIZED;
+        this.responseStatus = "Falied";
+        this.tranDate = DateTimeFormatter.getCurrentDate();
+        this.tranTime = DateTimeFormatter.getCurrentTime();
+    }
 }

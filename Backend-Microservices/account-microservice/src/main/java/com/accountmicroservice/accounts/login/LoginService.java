@@ -35,7 +35,8 @@ public class LoginService {
 
         if(!isUserLocked(user, responseToClient)
                 && !isUserBlocked(user, responseToClient)
-                && isUserActive(user, responseToClient)){
+                && isUserActive(user, responseToClient)
+                && isUserVerified(user, responseToClient)){
 
             if(isPasswordCorrect(user, loginRequest, responseToClient)) {
                 responseToClient.setFirstName(user.getFirstName());
@@ -47,9 +48,8 @@ public class LoginService {
                 responseToClient.setSuccessful();
 
             } else {
-                System.out.println("Wrong Password");
+
                 if(reachedMaxFailAttempts(user, responseToClient)){
-                    System.out.println("Reached Max Fail Attempts");
                     user.setLocked(true);
                     user.setLockRemovalDate(DateTimeFormatter.getCurrentDate());
                     user.setLockRemovalTime(DateTimeFormatter.hoursFromNow(1));
@@ -71,6 +71,15 @@ public class LoginService {
         }
         return true;
     }
+
+    private boolean isUserVerified(User user, LoginResponse responseToClient) {
+        if(!user.isVerified()){
+            responseToClient.setUserNotVerified();
+            return false;
+        }
+        return true;
+    }
+
 
     private boolean isUserBlocked(User user, LoginResponse responseToClient) {
         if(user.isBlocked()){

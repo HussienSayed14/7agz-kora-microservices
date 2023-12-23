@@ -15,7 +15,6 @@ public class DateTimeFormatter {
         Date now = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("HHmmss");
         String formattedTime = formatter.format(now);
-        System.out.println(formattedTime);
         return Integer.parseInt(formattedTime);
     }
 
