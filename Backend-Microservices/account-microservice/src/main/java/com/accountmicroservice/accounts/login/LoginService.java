@@ -47,15 +47,16 @@ public class LoginService {
                 responseToClient.setSuccessful();
 
             } else {
+                System.out.println("Wrong Password");
                 if(reachedMaxFailAttempts(user, responseToClient)){
+                    System.out.println("Reached Max Fail Attempts");
                     user.setLocked(true);
                     user.setLockRemovalDate(DateTimeFormatter.getCurrentDate());
                     user.setLockRemovalTime(DateTimeFormatter.hoursFromNow(1));
                     userRepository.save(user);
                 }
-                responseToClient.setWrongPassword();
-                user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
-                userRepository.save(user);
+
+
             }
         }
 
@@ -83,10 +84,13 @@ public class LoginService {
         if(user.isLocked()){
             if(user.getLockRemovalDate() > DateTimeFormatter.getCurrentDate()
                     || user.getLockRemovalTime() >= DateTimeFormatter.getCurrentTime()){
-                return false;
+                responseToClient.setUserIsLocked();
+                return true;
             }
-            responseToClient.setUserIsLocked();
-            return true;
+            user.setFailedLoginAttempts(0);
+            user.setLocked(false);
+            userRepository.save(user);
+            return false;
         }
         return false;
     }
@@ -95,6 +99,8 @@ public class LoginService {
         if(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
             return true;
         }
+        user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
+        userRepository.save(user);
         responseToClient.setWrongPassword();
         return false;
     }
