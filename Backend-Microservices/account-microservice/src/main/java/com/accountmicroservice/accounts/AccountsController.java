@@ -44,13 +44,15 @@ public class AccountsController {
          registerService.createEmailVerificationOtp(otpRequest.getEmail());
     }
 
-
-
-
     @Operation(summary = "Login", description = "This Api is used to login a user and return a JWT token.")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest,HttpServletRequest request) {
         return loginService.login(loginRequest,request);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return loginService.getUserPhoto();
     }
 
 

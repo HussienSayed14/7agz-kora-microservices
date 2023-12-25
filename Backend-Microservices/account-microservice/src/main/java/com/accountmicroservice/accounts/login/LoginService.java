@@ -13,6 +13,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
+
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +30,7 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final LoginAuditRepository loginAuditRepository;
-
+    private final S3Presigner s3Presigner;
     public ResponseEntity login(LoginRequest loginRequest,HttpServletRequest request) {
         LoginResponse responseToClient = new LoginResponse();
         User user = userRepository.findByEmail(loginRequest.getEmail());
@@ -143,6 +150,39 @@ public class LoginService {
 
     }
 
+
+    public String getUserPhoto(){
+        try  {
+            final String bucketName = "7agz-kora";
+            final String objectPath = "users/testEmail/MyPic.jpg";
+
+
+
+            // Create a GetObjectRequest to be pre-signed
+            GetObjectRequest getObjectRequest =
+                    GetObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(objectPath)
+                            .build();
+
+            // Create a GetObjectPresignRequest to specify the signature duration
+            GetObjectPresignRequest getObjectPresignRequest =
+                    GetObjectPresignRequest.builder()
+                            .signatureDuration(Duration.ofDays(2))
+                            .getObjectRequest(getObjectRequest)
+                            .build();
+
+            // Generate the presigned request
+            PresignedGetObjectRequest presignedGetObjectRequest =
+                    s3Presigner.presignGetObject(getObjectPresignRequest);
+
+            // Log the presigned URL, for example.
+            return presignedGetObjectRequest.url().toString();
+        }catch (Exception e){
+            return null;
+        }
+
+    }
 
 
 
