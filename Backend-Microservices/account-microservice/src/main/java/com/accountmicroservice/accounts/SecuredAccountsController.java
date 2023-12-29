@@ -5,7 +5,6 @@ import com.accountmicroservice.accounts.forgotPassword.ForgotPasswordService;
 import com.accountmicroservice.accounts.forgotPassword.requests.ForgotPasswordRequest;
 import com.accountmicroservice.accounts.profile.ProfileService;
 import com.accountmicroservice.accounts.profile.requests.ChangePasswordRequest;
-import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.util.GenericResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +20,12 @@ public class SecuredAccountsController {
     private final ProfileService profileService;
 
 
-
     @Operation(summary = "Forgot Password", description = "Validate the Token sent to the user and change their password.")
     @PostMapping("/forgotPassword")
     public ResponseEntity<GenericResponses> forgotPassword(@RequestBody ForgotPasswordRequest request,
                                                            @RequestHeader("Authorization") String bearerToken) {
         return forgotPasswordService.validateAndChangePassword(request, bearerToken);
     }
-
 
     @Operation(summary = "Change Password", description = "Change the user's password.")
     @PostMapping("/changePassword")
