@@ -51,7 +51,7 @@ public class User implements UserDetails {
     private boolean isLocked;
     @Column(name = "NATIONAL_ID")
     private String nationalId;
-    @Column(name = "CREATATION_DATE")
+    @Column(name = "CREATION_DATE")
     private int creationDate;
     @Column(name = "CREATION_TIME")
     private int creationTime;
@@ -65,6 +65,8 @@ public class User implements UserDetails {
     private int lockRemovalDate;
     @Column(name = "LOCK_REMOVAL_TIME")
     private int lockRemovalTime;
+    @Column(name = "PROFILE_PICTURE")
+    private String profilePicture;
 
 
     @Override

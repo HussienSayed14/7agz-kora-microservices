@@ -2,6 +2,7 @@ package com.accountmicroservice.accounts.login;
 
 import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.login.responses.LoginResponse;
+import com.accountmicroservice.aws.AwsService;
 import com.accountmicroservice.config.JwtService;
 import com.accountmicroservice.entities.LoginAudit;
 import com.accountmicroservice.entities.User;
@@ -13,13 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
-import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
-import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +25,8 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final LoginAuditRepository loginAuditRepository;
-    private final S3Presigner s3Presigner;
+    private final AwsService awsService;
+
     public ResponseEntity login(LoginRequest loginRequest,HttpServletRequest request) {
         LoginResponse responseToClient = new LoginResponse();
         User user = userRepository.findByEmail(loginRequest.getEmail());
@@ -50,6 +46,7 @@ public class LoginService {
                 responseToClient.setLastName(user.getLastName());
                 responseToClient.setRole(user.getRole());
                 responseToClient.setToken(jwtService.generateToken(user));
+                responseToClient.setPhotoUrl(awsService.getUserPhoto(user.getEmail()));
                 user.setFailedLoginAttempts(0);
                 userRepository.save(user);
                 responseToClient.setSuccessful();
@@ -62,8 +59,6 @@ public class LoginService {
                     user.setLockRemovalTime(DateTimeFormatter.hoursFromNow(1));
                     userRepository.save(user);
                 }
-
-
             }
         }
 
@@ -126,7 +121,6 @@ public class LoginService {
             responseToClient.setUserIsLocked();
             return true;
         }
-
         return false;
     }
 
@@ -147,49 +141,6 @@ public class LoginService {
             System.out.println("Error Saving Login Audit");
 
         }
-
     }
-
-
-    private String getUserPhoto(){
-        try  {
-            final String bucketName = "7agz-kora";
-            final String objectPath = "users/testEmail/MyPic.jpg";
-
-
-
-            // Create a GetObjectRequest to be pre-signed
-            GetObjectRequest getObjectRequest =
-                    GetObjectRequest.builder()
-                            .bucket(bucketName)
-                            .key(objectPath)
-                            .build();
-
-            // Create a GetObjectPresignRequest to specify the signature duration
-            GetObjectPresignRequest getObjectPresignRequest =
-                    GetObjectPresignRequest.builder()
-                            .signatureDuration(Duration.ofDays(7))
-                            .getObjectRequest(getObjectRequest)
-                            .build();
-
-            // Generate the presigned request
-            PresignedGetObjectRequest presignedGetObjectRequest =
-                    s3Presigner.presignGetObject(getObjectPresignRequest);
-
-            // Log the presigned URL, for example.
-            return presignedGetObjectRequest.url().toString();
-        }catch (Exception e){
-            return null;
-        }
-
-    }
-
-
-
-
-
-
-
-
 
 }

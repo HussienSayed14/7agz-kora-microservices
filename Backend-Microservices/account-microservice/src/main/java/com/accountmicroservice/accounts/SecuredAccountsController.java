@@ -16,11 +16,7 @@ public class SecuredAccountsController {
 
     private final ForgotPasswordService forgotPasswordService;
 
-    @Operation(summary = "Forgot Password Request", description = "This Api is used to send a link to the user's email to reset their password.")
-    @PostMapping("/forgotPasswordRequest")
-    public ResponseEntity forgotPasswordRequest(@RequestBody GetOtpRequest request){
-        return forgotPasswordService.forgotPasswordRequest(request);
-    }
+
 
     @Operation(summary = "Forgot Password", description = "Validate the Token sent to the user and change their password.")
     @PostMapping("/forgotPassword")

@@ -20,9 +20,7 @@ import org.springframework.stereotype.Service;
 public class RegisterService {
 
     private final UserRepository userRepository;
-
     private final OtpRepository otpRepository;
-
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
@@ -36,10 +34,11 @@ public class RegisterService {
         String otp = EmailService.generateOTP(6);
         if(createRegisterRequestOtp(email, otp)){
             String body = "Please do not Share this OTP with anyone: " + otp + "\nThis OTP will expire in 10 minutes";
-            emailService.sendEmail(email,"7agz Kora EMAIL VERIFICATION", body);
+            emailService.sendEmail(email,"EMAIL VERIFICATION", body);
         }
-
     }
+
+
 
     private boolean createRegisterRequestOtp(String email, String otp) {
         OTP otpRecord = OTP.builder()

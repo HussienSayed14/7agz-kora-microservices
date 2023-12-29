@@ -1,10 +1,13 @@
 package com.accountmicroservice.accounts.register.requests;
 
-import jakarta.persistence.Column;
+
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Getter
+@Setter
 public class RegisterRequest {
     private String email;
     private String firstName;
@@ -16,6 +19,7 @@ public class RegisterRequest {
     private String securityQuestion;
     private String securityAnswer;
     private String nationalId;
+    private MultipartFile profilePicture;
 
 
 }

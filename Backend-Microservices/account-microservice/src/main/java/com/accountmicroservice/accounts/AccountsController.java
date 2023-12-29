@@ -1,6 +1,7 @@
 package com.accountmicroservice.accounts;
 
 
+import com.accountmicroservice.accounts.forgotPassword.ForgotPasswordService;
 import com.accountmicroservice.accounts.login.LoginService;
 import com.accountmicroservice.accounts.login.requests.LoginRequest;
 import com.accountmicroservice.accounts.register.RegisterService;
@@ -23,8 +24,7 @@ public class AccountsController {
 
     private final RegisterService registerService;
     private final LoginService loginService;
-
-
+    private final ForgotPasswordService forgotPasswordService;
 
 
 
@@ -50,12 +50,13 @@ public class AccountsController {
         return loginService.login(loginRequest,request);
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return loginService.getUserPhoto();
+
+
+    @Operation(summary = "Forgot Password Request", description = "This Api is used to send a link to the user's email to reset their password.")
+    @PostMapping("/forgotPasswordRequest")
+    public ResponseEntity forgotPasswordRequest(@RequestBody GetOtpRequest request){
+        return forgotPasswordService.forgotPasswordRequest(request);
     }
-
-
 
 
 }

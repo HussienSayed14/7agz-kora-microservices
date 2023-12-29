@@ -11,5 +11,6 @@ public class LoginResponse extends GenericResponses {
     private String firstName;
     private String lastName;
     private String role;
+    private String photoUrl;
 
 }
