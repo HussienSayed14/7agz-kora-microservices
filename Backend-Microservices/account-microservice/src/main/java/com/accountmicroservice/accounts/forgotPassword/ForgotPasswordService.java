@@ -24,7 +24,7 @@ public class ForgotPasswordService {
     private final EmailService emailService;
     private final JwtService jwtService;
 
-    public ResponseEntity forgotPasswordRequest(GetOtpRequest otpRequest){
+    public ResponseEntity<RequestRegisterResponse> forgotPasswordRequest(GetOtpRequest otpRequest){
         RequestRegisterResponse responseToClient = new RequestRegisterResponse();
         User user = userRepository.findByEmail(otpRequest.getEmail());
 

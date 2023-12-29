@@ -27,7 +27,7 @@ public class LoginService {
     private final LoginAuditRepository loginAuditRepository;
     private final AwsService awsService;
 
-    public ResponseEntity login(LoginRequest loginRequest,HttpServletRequest request) {
+    public ResponseEntity<LoginResponse> login(LoginRequest loginRequest,HttpServletRequest request) {
         LoginResponse responseToClient = new LoginResponse();
         User user = userRepository.findByEmail(loginRequest.getEmail());
 

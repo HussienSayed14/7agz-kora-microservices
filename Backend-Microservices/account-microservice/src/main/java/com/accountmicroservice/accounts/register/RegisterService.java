@@ -64,7 +64,7 @@ public class RegisterService {
         }
     }
 
-    public ResponseEntity verifyOtp(EmailVerificationRequest emailVerificationRequest) {
+    public ResponseEntity<VerifyOtpResponse> verifyOtp(EmailVerificationRequest emailVerificationRequest) {
         VerifyOtpResponse responseToClient = new VerifyOtpResponse();
         OTP otpRecord = otpRepository.getRegisterationOtpByEmail(emailVerificationRequest.getEmail());
         if (otpRecord == null) {
@@ -99,7 +99,7 @@ public class RegisterService {
     }
 
 
-    public ResponseEntity register(RegisterRequest registerRequest) {
+    public ResponseEntity<GenericResponses> register(RegisterRequest registerRequest) {
         GenericResponses responseToClient = new GenericResponses();
         User existingUser = userRepository.findByEmail(registerRequest.getEmail());
 
