@@ -61,11 +61,4 @@ public class AccountsController {
         return forgotPasswordService.forgotPasswordRequest(request);
     }
 
-
-    @PostMapping("/test")
-    public String test(@RequestParam("file")MultipartFile file,@RequestParam("email")String email){
-        return awsService.uploadUserPhoto(file,email);
-    }
-
-
 }
