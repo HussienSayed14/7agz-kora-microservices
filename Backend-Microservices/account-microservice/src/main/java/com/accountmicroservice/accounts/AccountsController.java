@@ -11,7 +11,6 @@ import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.accounts.register.requests.RegisterRequest;
 import com.accountmicroservice.accounts.register.responses.RequestRegisterResponse;
 import com.accountmicroservice.accounts.register.responses.VerifyOtpResponse;
-import com.accountmicroservice.aws.AwsService;
 import com.accountmicroservice.util.GenericResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +30,7 @@ public class AccountsController {
     private final RegisterService registerService;
     private final LoginService loginService;
     private final ForgotPasswordService forgotPasswordService;
-    private final AwsService awsService;
+
 
 
 

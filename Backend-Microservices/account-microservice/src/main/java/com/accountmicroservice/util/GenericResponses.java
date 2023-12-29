@@ -133,4 +133,13 @@ public class GenericResponses {
         this.tranDate = DateTimeFormatter.getCurrentDate();
         this.tranTime = DateTimeFormatter.getCurrentTime();
     }
+
+    public void setWrongOldPassword() {
+        this.responseCode = "12";
+        this.responseMessage = "You entered wrong old password";
+        this.httpStatus = HttpStatus.UNAUTHORIZED;
+        this.responseStatus = "Falied";
+        this.tranDate = DateTimeFormatter.getCurrentDate();
+        this.tranTime = DateTimeFormatter.getCurrentTime();
+    }
 }
