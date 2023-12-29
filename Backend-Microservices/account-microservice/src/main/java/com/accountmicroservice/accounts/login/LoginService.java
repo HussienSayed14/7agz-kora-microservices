@@ -151,7 +151,7 @@ public class LoginService {
     }
 
 
-    public String getUserPhoto(){
+    private String getUserPhoto(){
         try  {
             final String bucketName = "7agz-kora";
             final String objectPath = "users/testEmail/MyPic.jpg";
@@ -168,7 +168,7 @@ public class LoginService {
             // Create a GetObjectPresignRequest to specify the signature duration
             GetObjectPresignRequest getObjectPresignRequest =
                     GetObjectPresignRequest.builder()
-                            .signatureDuration(Duration.ofDays(2))
+                            .signatureDuration(Duration.ofDays(7))
                             .getObjectRequest(getObjectRequest)
                             .build();
 
