@@ -14,12 +14,8 @@ public class RegisterRequest {
     private String lastName;
     private String password;
     private String phoneNumber;
-    private String role;
     private int dateOfBirth;
     private String securityQuestion;
     private String securityAnswer;
     private String nationalId;
-    private MultipartFile profilePicture;
-
-
 }
