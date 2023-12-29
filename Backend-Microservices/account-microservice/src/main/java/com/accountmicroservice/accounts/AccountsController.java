@@ -11,6 +11,7 @@ import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.accounts.register.requests.RegisterRequest;
 import com.accountmicroservice.accounts.register.responses.RequestRegisterResponse;
 import com.accountmicroservice.accounts.register.responses.VerifyOtpResponse;
+import com.accountmicroservice.aws.AwsService;
 import com.accountmicroservice.util.GenericResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/accounts/api/v1/auth")
@@ -29,6 +31,7 @@ public class AccountsController {
     private final RegisterService registerService;
     private final LoginService loginService;
     private final ForgotPasswordService forgotPasswordService;
+    private final AwsService awsService;
 
 
 
@@ -41,8 +44,9 @@ public class AccountsController {
 
     @Operation(summary = "Register", description = "This Api is used to register a new user after verifying their email.")
     @PostMapping("/register")
-    public ResponseEntity<GenericResponses> register(@RequestBody @Valid RegisterRequest registerRequest) {
-        return registerService.register(registerRequest);
+    public ResponseEntity<GenericResponses> register(@RequestBody @Valid RegisterRequest registerRequest,
+                                                     @RequestParam("profilePic") MultipartFile profilePic) {
+        return registerService.register(registerRequest,profilePic);
     }
     @Operation(summary = "Resend OTP", description = "This Api is used to resend the OTP to the user's email.")
     @PostMapping("/resendOtp")
@@ -55,8 +59,6 @@ public class AccountsController {
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest request) {
         return loginService.login(loginRequest,request);
     }
-
-
 
     @Operation(summary = "Forgot Password Request", description = "This Api is used to send a link to the user's email to reset their password.")
     @PostMapping("/forgotPasswordRequest")

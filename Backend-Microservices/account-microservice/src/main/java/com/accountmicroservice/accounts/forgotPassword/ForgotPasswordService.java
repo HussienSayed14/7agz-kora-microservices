@@ -45,7 +45,7 @@ public class ForgotPasswordService {
     }
 
 
-    public ResponseEntity validateAndChangePassword(ForgotPasswordRequest forgotPasswordRequest, String token){
+    public ResponseEntity<GenericResponses> validateAndChangePassword(ForgotPasswordRequest forgotPasswordRequest, String token){
 
         GenericResponses responseToClient = new GenericResponses();
         User user = userRepository.findByEmail(forgotPasswordRequest.getEmail());

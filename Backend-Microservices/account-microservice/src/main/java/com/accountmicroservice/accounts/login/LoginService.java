@@ -30,6 +30,7 @@ public class LoginService {
     public ResponseEntity<LoginResponse> login(LoginRequest loginRequest,HttpServletRequest request) {
         LoginResponse responseToClient = new LoginResponse();
         User user = userRepository.findByEmail(loginRequest.getEmail());
+        String userPhoto;
 
         if(user == null){
            responseToClient.setEmailDoesNotExist();
@@ -46,13 +47,20 @@ public class LoginService {
                 responseToClient.setLastName(user.getLastName());
                 responseToClient.setRole(user.getRole());
                 responseToClient.setToken(jwtService.generateToken(user));
-                responseToClient.setPhotoUrl(awsService.getUserPhoto(user.getEmail()));
+                try {
+                    userPhoto = awsService.getUserPhoto(user.getEmail());
+                    if(userPhoto == null){
+                        userPhoto = awsService.getUserPhoto("defaultUser/ProfilePic.jpg");
+                    }
+                } catch (Exception e){
+                    userPhoto = awsService.getUserPhoto("defaultUser/ProfilePic.jpg");
+
+                }
+                responseToClient.setPhotoUrl(userPhoto);
                 user.setFailedLoginAttempts(0);
                 userRepository.save(user);
                 responseToClient.setSuccessful();
-
             } else {
-
                 if(reachedMaxFailAttempts(user, responseToClient)){
                     user.setLocked(true);
                     user.setLockRemovalDate(DateTimeFormatter.getCurrentDate());

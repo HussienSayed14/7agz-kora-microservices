@@ -3,6 +3,7 @@ package com.accountmicroservice.accounts.register;
 import com.accountmicroservice.accounts.register.requests.EmailVerificationRequest;
 import com.accountmicroservice.accounts.register.requests.RegisterRequest;
 import com.accountmicroservice.accounts.register.responses.VerifyOtpResponse;
+import com.accountmicroservice.aws.AwsService;
 import com.accountmicroservice.entities.OTP;
 import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.OtpRepository;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class RegisterService {
     private final OtpRepository otpRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final AwsService awsService;
 
 
     public void createEmailVerificationOtp(String email) {
@@ -99,7 +102,7 @@ public class RegisterService {
     }
 
 
-    public ResponseEntity<GenericResponses> register(RegisterRequest registerRequest) {
+    public ResponseEntity<GenericResponses> register(RegisterRequest registerRequest, MultipartFile profilePic){
         GenericResponses responseToClient = new GenericResponses();
         User existingUser = userRepository.findByEmail(registerRequest.getEmail());
 
@@ -133,6 +136,11 @@ public class RegisterService {
             userRepository.save(user);
             createEmailVerificationOtp(user.getEmail());
             responseToClient.setSuccessful();
+
+            //TODO: Make this function async
+            if(profilePic != null){
+                awsService.uploadUserPhoto(profilePic,user.getEmail());
+            }
             return ResponseEntity.ok().body(responseToClient);
         } catch (Exception e) {
             responseToClient.setServerErrorHappened();
