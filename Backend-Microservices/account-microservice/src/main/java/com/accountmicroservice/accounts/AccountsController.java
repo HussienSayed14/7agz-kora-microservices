@@ -43,9 +43,8 @@ public class AccountsController {
 
     @Operation(summary = "Register", description = "This Api is used to register a new user after verifying their email.")
     @PostMapping("/register")
-    public ResponseEntity<GenericResponses> register(@RequestBody @Valid RegisterRequest registerRequest,
-                                                     @RequestParam("profilePic") MultipartFile profilePic) {
-        return registerService.register(registerRequest,profilePic);
+    public ResponseEntity<GenericResponses> register(@RequestBody @Valid RegisterRequest registerRequest) {
+        return registerService.register(registerRequest);
     }
     @Operation(summary = "Resend OTP", description = "This Api is used to resend the OTP to the user's email.")
     @PostMapping("/resendOtp")

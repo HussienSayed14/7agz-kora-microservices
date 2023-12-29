@@ -102,7 +102,7 @@ public class RegisterService {
     }
 
 
-    public ResponseEntity<GenericResponses> register(RegisterRequest registerRequest, MultipartFile profilePic){
+    public ResponseEntity<GenericResponses> register(RegisterRequest registerRequest){
         GenericResponses responseToClient = new GenericResponses();
         User existingUser = userRepository.findByEmail(registerRequest.getEmail());
 
@@ -118,7 +118,7 @@ public class RegisterService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .role("USER")
-                .dateOfBirth(registerRequest.getDateOfBirth())
+                .dateOfBirth(123456)
                 .securityQuestion(registerRequest.getSecurityQuestion())
                 .securityAnswer(registerRequest.getSecurityAnswer())
                 .isBlocked(false)
@@ -136,11 +136,6 @@ public class RegisterService {
             userRepository.save(user);
             createEmailVerificationOtp(user.getEmail());
             responseToClient.setSuccessful();
-
-            //TODO: Make this function async
-            if(profilePic != null){
-                awsService.uploadUserPhoto(profilePic,user.getEmail());
-            }
             return ResponseEntity.ok().body(responseToClient);
         } catch (Exception e) {
             responseToClient.setServerErrorHappened();
