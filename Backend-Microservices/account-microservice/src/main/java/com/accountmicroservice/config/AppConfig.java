@@ -52,8 +52,12 @@ public class AppConfig{
 
     @Bean
     public S3Client s3Client() {
+        String accessKey = environment.getProperty("aws.access.key");
+        String secretKey = environment.getProperty("aws.secret.key");
+        AwsCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
         return S3Client.builder()
                 .region(Region.of("us-east-1"))
+                .credentialsProvider(()->credentials)
                 .build();
     }
 

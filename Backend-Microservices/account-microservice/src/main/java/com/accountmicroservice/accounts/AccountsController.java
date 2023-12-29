@@ -8,6 +8,7 @@ import com.accountmicroservice.accounts.register.RegisterService;
 import com.accountmicroservice.accounts.register.requests.EmailVerificationRequest;
 import com.accountmicroservice.accounts.register.requests.GetOtpRequest;
 import com.accountmicroservice.accounts.register.requests.RegisterRequest;
+import com.accountmicroservice.aws.AwsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/accounts/api/v1/auth")
@@ -25,6 +27,7 @@ public class AccountsController {
     private final RegisterService registerService;
     private final LoginService loginService;
     private final ForgotPasswordService forgotPasswordService;
+    private final AwsService awsService;
 
 
 
@@ -56,6 +59,12 @@ public class AccountsController {
     @PostMapping("/forgotPasswordRequest")
     public ResponseEntity forgotPasswordRequest(@RequestBody GetOtpRequest request){
         return forgotPasswordService.forgotPasswordRequest(request);
+    }
+
+
+    @PostMapping("/test")
+    public String test(@RequestParam("file")MultipartFile file,@RequestParam("email")String email){
+        return awsService.uploadUserPhoto(file,email);
     }
 
 
