@@ -52,10 +52,10 @@ public class LoginService {
                     if(awsService.doesObjectExist(user.getEmail())){
                         userPhoto = awsService.getUserPhoto(user.getEmail());
                     } else {
-                        userPhoto = awsService.getUserPhoto("defaultUser/ProfilePic.jpg");
+                        userPhoto = awsService.getUserPhoto("defaultUser");
                     }
                 } catch (Exception e){
-                    userPhoto = awsService.getUserPhoto("defaultUser/ProfilePic.jpg");
+                    userPhoto = awsService.getUserPhoto("defaultUser");
 
                 }
                 responseToClient.setPhotoUrl(userPhoto);

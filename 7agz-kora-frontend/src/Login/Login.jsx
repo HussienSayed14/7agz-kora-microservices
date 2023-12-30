@@ -46,15 +46,15 @@ function Login() {
   function handleSuccessLogin(response) {
     if (response.responseCode === "0") {
       const cookie = new Cookies();
-      cookies.set("token", response.token, {
+      cookie.set("token", response.token, {
         path: "/",
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
       });
-      cookies.set("image", response.photoUrl, {
+      cookie.set("image", response.photoUrl, {
         path: "/",
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
       });
-      cookies.set("fullName", response.firstName + " " + response.lastName, {
+      cookie.set("fullName", response.firstName + " " + response.lastName, {
         path: "/",
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
       });
