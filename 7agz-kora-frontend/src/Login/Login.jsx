@@ -59,9 +59,7 @@ function Login() {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
       });
 
-      console.log(response);
-
-      //window.location = "/homePage";
+      window.location = "/homePage";
     }
   }
 
