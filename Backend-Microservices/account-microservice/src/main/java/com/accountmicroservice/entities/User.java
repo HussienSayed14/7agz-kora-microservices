@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
     @Column(name = "ROLE")
-    private String role;
+    private Roles role;
     @Column(name = "DATE_OF_BIRTH")
     private int dateOfBirth;
     @Column(name = "SECURITY_QUESTION")
@@ -71,7 +71,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role));
+        return List.of(new SimpleGrantedAuthority(role.toString()));
     }
 
     @Override

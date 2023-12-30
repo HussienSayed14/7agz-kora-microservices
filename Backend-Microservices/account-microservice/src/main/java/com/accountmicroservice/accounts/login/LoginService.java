@@ -45,7 +45,7 @@ public class LoginService {
             if(isPasswordCorrect(user, loginRequest, responseToClient)) {
                 responseToClient.setFirstName(user.getFirstName());
                 responseToClient.setLastName(user.getLastName());
-                responseToClient.setRole(user.getRole());
+                responseToClient.setRole(String.valueOf(user.getRole()));
                 responseToClient.setToken(jwtService.generateToken(user));
                 try {
                     userPhoto = awsService.getUserPhoto(user.getEmail());

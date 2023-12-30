@@ -1,13 +1,25 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { MDBSpinner } from "mdb-react-ui-kit";
+import {
+  MDBSpinner,
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+} from "mdb-react-ui-kit";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./Register.css";
 
 function Register() {
   const baseUrl = process.env.REACT_APP_API_URL;
   const [loading, setLoading] = useState(false);
   const [renderCounter, setRenderCounter] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [optSmModal, setOptSmModal] = useState(false);
   const [registerRequest, setRegisterRequest] = useState({
     email: "",
     firstName: "",
@@ -19,6 +31,9 @@ function Register() {
     securityAnswer: "",
     nationalId: "",
   });
+
+  const toggleOpen = () => setOptSmModal(!optSmModal);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,29 +48,56 @@ function Register() {
     setRenderCounter(renderCounter + 1);
   };
 
+  function handleSuccessRegister(response) {
+    if (response.responseCode === "0") {
+      navigate("/verifyEmail", { state: registerRequest.email });
+    }
+  }
+
+  function handleFailedRegister(response) {
+    setErrorMessage(response.responseMessage);
+    toggleOpen();
+  }
+
   useEffect(() => {
+    if (registerRequest.email === "") {
+      return;
+    }
     const endPoint = "accounts/api/v1/auth";
     setLoading(true);
     axios
       .post(`${baseUrl}${endPoint}/register`, registerRequest)
       .then((res) => {
-        console.log(res.data);
+        handleSuccessRegister(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err.response.data);
         setLoading(false);
+        handleFailedRegister(err.response.data);
       });
-    setLoading(false);
   }, [renderCounter]);
 
   return (
     <div className="main-div">
+      <MDBModal open={optSmModal} tabIndex="-1" setOpen={setOptSmModal}>
+        <MDBModalDialog size="sm">
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Error!</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={toggleOpen}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>{errorMessage}</MDBModalBody>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
       {loading ? (
         <div className="loading-icon-div">
           <MDBSpinner className="loading-icon" color="primary">
             <span className="visually-hidden">Loading...</span>
-            alooo
           </MDBSpinner>
         </div>
       ) : (
@@ -128,6 +170,7 @@ function Register() {
               <div class="button">
                 <input type="submit" onClick={handleSubmit} value="Register" />
               </div>
+              <a href="/login">Already Has An Account?</a>
             </form>
           </div>
         </div>

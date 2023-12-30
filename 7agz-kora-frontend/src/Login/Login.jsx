@@ -1,72 +1,112 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import {
-    MDBInput,
-    MDBCol,
-    MDBRow,
-    MDBCheckbox,
-    MDBBtn
-  } from 'mdb-react-ui-kit';
-  import { useState } from 'react';
-  import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-
-import './Login.css'
-
+  MDBInput,
+  MDBCol,
+  MDBRow,
+  MDBBtn,
+  MDBSpinner,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+} from "mdb-react-ui-kit";
+import { useState } from "react";
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import "./Login.css";
 
 function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const baseUrl = process.env.REACT_APP_API_URL;
+  const [loginRequest, setLoginRequest] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [renderCounter, setRenderCounter] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [optSmModal, setOptSmModal] = useState(false);
 
+  const toggleOpen = () => setOptSmModal(!optSmModal);
 
-    const handleEmailChange = e =>{
-        setEmail(e.target.value);
-    };
-    const handlePasswordChange = e =>{
-        setPassword(e.target.value);
- };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setLoginRequest((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
- 
-    const handleLogin = e =>{
-        e.preventDefault();
-        if( email === "" || password === ""){
-            console.log("Error");
-            window.alert("Please enter Email and Password!")
-        }else{
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setRenderCounter(renderCounter + 1);
+  };
 
-        var loginObject = {
-            email: email,
-            password: password
-        }
-         console.log(loginObject);
+  function handleSuccessRegister(response) {
+    if (response.responseCode === "0") {
+      // Set Cookies
+      window.location = "/homePage";
     }
-    };
+  }
 
+  function handleFailedRegister(response) {
+    setErrorMessage(response.responseMessage);
+    toggleOpen();
+  }
 
+  useEffect(() => {
+    if (registerRequest.email === "") {
+      return;
+    }
+    const endPoint = "accounts/api/v1/auth";
+    setLoading(true);
+    axios
+      .post(`${baseUrl}${endPoint}/register`, registerRequest)
+      .then((res) => {
+        handleSuccessLogin(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        handleFailedLogin(err.response.data);
+      });
+  }, [renderCounter]);
 
-  
   return (
     <div className="login-container">
-    <form className="login-form">
-      <MDBInput onChange={handleEmailChange} className='mb-4 email-field' type='email' id='form1Example1' label='Email address' />
-      <MDBInput onChange={handlePasswordChange} className='mb-4' type='password' id='form1Example2' label='Password' />
+      <form className="login-form">
+        <MDBInput
+          onChange={handleInputChange}
+          className="mb-4 email-field"
+          type="email"
+          id="form1Example1"
+          label="Email address"
+          name="email"
+        />
+        <MDBInput
+          onChange={handleInputChange}
+          className="mb-4"
+          type="password"
+          id="form1Example2"
+          label="Password"
+          name="password"
+        />
 
-      <MDBRow className='mb-4'>
-        <MDBCol className='d-flex justify-content-center'>
-          <MDBCheckbox id='form1Example3' label='Remember me' defaultChecked />
-        </MDBCol>
-        <MDBCol>
-          <a href='/forgotPasswordRequest'>Forgot password?</a>
-        </MDBCol>
-      </MDBRow>
-
-      <MDBBtn onClick={handleLogin} type='submit' block>
-        Sign in
-      </MDBBtn>
-    </form>
-  </div>
+        <MDBRow className="mb-4">
+          <MDBCol className="d-flex">
+            <a href="/forgotPasswordRequest">Forgot password?</a>
+          </MDBCol>
+          <MDBCol className="d-flex justify-content-center">
+            <a href="/register">Register</a>
+          </MDBCol>
+        </MDBRow>
+        <MDBBtn onClick={handleSubmit} type="submit" block>
+          Sign in
+        </MDBBtn>
+      </form>
+    </div>
   );
-
-  
 }
 
 export default Login;

@@ -5,6 +5,7 @@ import com.accountmicroservice.accounts.register.requests.RegisterRequest;
 import com.accountmicroservice.accounts.register.responses.VerifyOtpResponse;
 import com.accountmicroservice.aws.AwsService;
 import com.accountmicroservice.entities.OTP;
+import com.accountmicroservice.entities.Roles;
 import com.accountmicroservice.entities.User;
 import com.accountmicroservice.repositories.OtpRepository;
 import com.accountmicroservice.repositories.UserRepository;
@@ -29,13 +30,17 @@ public class RegisterService {
 
 
     public void createEmailVerificationOtp(String email) {
+        System.out.println("createEmailVerificationOtp");
 
         User user = userRepository.findByEmail(email);
         if(user.isVerified()){
+            System.out.println("User Is Already Verified");
             return;
         }
         String otp = EmailService.generateOTP(6);
+        System.out.println("OTP generated");
         if(createRegisterRequestOtp(email, otp)){
+            System.out.println("Email will be sent");
             String body = "Please do not Share this OTP with anyone: " + otp + "\nThis OTP will expire in 10 minutes";
             emailService.sendEmail(email,"EMAIL VERIFICATION", body);
         }
@@ -61,6 +66,7 @@ public class RegisterService {
 
         try {
             otpRepository.save(otpRecord);
+            System.out.println("OTP saved");
             return true;
         } catch (Exception e) {
             return false;
@@ -78,6 +84,9 @@ public class RegisterService {
         if (isOtpValid(otpRecord, responseToClient)
                 && isOtpCorrect(emailVerificationRequest.getOtp(), otpRecord, responseToClient)) {
             otpRepository.delete(otpRecord);
+            User user = userRepository.findByEmail(emailVerificationRequest.getEmail());
+            user.setVerified(true);
+            userRepository.save(user);
             responseToClient.setSuccessful();
             return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
         }
@@ -102,6 +111,8 @@ public class RegisterService {
     }
 
 
+
+
     public ResponseEntity<GenericResponses> register(RegisterRequest registerRequest){
         GenericResponses responseToClient = new GenericResponses();
         User existingUser = userRepository.findByEmail(registerRequest.getEmail());
@@ -117,7 +128,7 @@ public class RegisterService {
                 .lastName(registerRequest.getLastName())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phoneNumber(registerRequest.getPhoneNumber())
-                .role("USER")
+                .role(Roles.USER)
                 .dateOfBirth(123456)
                 .securityQuestion(registerRequest.getSecurityQuestion())
                 .securityAnswer(registerRequest.getSecurityAnswer())
@@ -136,11 +147,10 @@ public class RegisterService {
             userRepository.save(user);
             createEmailVerificationOtp(user.getEmail());
             responseToClient.setSuccessful();
-            return ResponseEntity.ok().body(responseToClient);
         } catch (Exception e) {
             responseToClient.setServerErrorHappened();
-            return ResponseEntity.badRequest().body(responseToClient);
         }
+        return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
     }
 }
 
