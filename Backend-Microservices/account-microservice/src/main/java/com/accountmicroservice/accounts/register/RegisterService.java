@@ -26,7 +26,6 @@ public class RegisterService {
     private final OtpRepository otpRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
-    private final AwsService awsService;
 
 
     public void createEmailVerificationOtp(String email) {
@@ -34,11 +33,9 @@ public class RegisterService {
 
         User user = userRepository.findByEmail(email);
         if(user.isVerified()){
-            System.out.println("User Is Already Verified");
             return;
         }
         String otp = EmailService.generateOTP(6);
-        System.out.println("OTP generated");
         if(createRegisterRequestOtp(email, otp)){
             System.out.println("Email will be sent");
             String body = "Please do not Share this OTP with anyone: " + otp + "\nThis OTP will expire in 10 minutes";
@@ -66,7 +63,6 @@ public class RegisterService {
 
         try {
             otpRepository.save(otpRecord);
-            System.out.println("OTP saved");
             return true;
         } catch (Exception e) {
             return false;

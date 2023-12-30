@@ -1,5 +1,6 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { React, useEffect, useState } from "react";
+import axios from "axios";
+import Cookies from "universal-cookie";
 import {
   MDBInput,
   MDBCol,
@@ -13,7 +14,6 @@ import {
   MDBModalTitle,
   MDBModalBody,
 } from "mdb-react-ui-kit";
-import { useState } from "react";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "./Login.css";
 
@@ -43,31 +43,47 @@ function Login() {
     setRenderCounter(renderCounter + 1);
   };
 
-  function handleSuccessRegister(response) {
+  function handleSuccessLogin(response) {
     if (response.responseCode === "0") {
-      // Set Cookies
-      window.location = "/homePage";
+      const cookie = new Cookies();
+      cookies.set("token", response.token, {
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      });
+      cookies.set("image", response.photoUrl, {
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      });
+      cookies.set("fullName", response.firstName + " " + response.lastName, {
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      });
+
+      console.log(response);
+
+      //window.location = "/homePage";
     }
   }
 
-  function handleFailedRegister(response) {
+  function handleFailedLogin(response) {
     setErrorMessage(response.responseMessage);
     toggleOpen();
   }
 
   useEffect(() => {
-    if (registerRequest.email === "") {
+    if (loginRequest.email === "") {
       return;
     }
     const endPoint = "accounts/api/v1/auth";
     setLoading(true);
     axios
-      .post(`${baseUrl}${endPoint}/register`, registerRequest)
+      .post(`${baseUrl}${endPoint}/login`, loginRequest)
       .then((res) => {
         handleSuccessLogin(res.data);
         setLoading(false);
       })
       .catch((err) => {
+        console.log(err.response.data);
         setLoading(false);
         handleFailedLogin(err.response.data);
       });
@@ -75,36 +91,59 @@ function Login() {
 
   return (
     <div className="login-container">
-      <form className="login-form">
-        <MDBInput
-          onChange={handleInputChange}
-          className="mb-4 email-field"
-          type="email"
-          id="form1Example1"
-          label="Email address"
-          name="email"
-        />
-        <MDBInput
-          onChange={handleInputChange}
-          className="mb-4"
-          type="password"
-          id="form1Example2"
-          label="Password"
-          name="password"
-        />
+      <MDBModal open={optSmModal} tabIndex="-1" setOpen={setOptSmModal}>
+        <MDBModalDialog size="sm">
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Error!</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={toggleOpen}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>{errorMessage}</MDBModalBody>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+      {loading ? (
+        <div className="loading-icon-div">
+          <MDBSpinner className="loading-icon" color="primary">
+            <span className="visually-hidden">Loading...</span>
+          </MDBSpinner>
+        </div>
+      ) : (
+        <form className="login-form">
+          <MDBInput
+            onChange={handleInputChange}
+            className="mb-4 email-field"
+            type="email"
+            id="form1Example1"
+            label="Email address"
+            name="email"
+          />
+          <MDBInput
+            onChange={handleInputChange}
+            className="mb-4"
+            type="password"
+            id="form1Example2"
+            label="Password"
+            name="password"
+          />
 
-        <MDBRow className="mb-4">
-          <MDBCol className="d-flex">
-            <a href="/forgotPasswordRequest">Forgot password?</a>
-          </MDBCol>
-          <MDBCol className="d-flex justify-content-center">
-            <a href="/register">Register</a>
-          </MDBCol>
-        </MDBRow>
-        <MDBBtn onClick={handleSubmit} type="submit" block>
-          Sign in
-        </MDBBtn>
-      </form>
+          <MDBRow className="mb-4">
+            <MDBCol className="d-flex">
+              <a href="/forgotPasswordRequest">Forgot password?</a>
+            </MDBCol>
+            <MDBCol className="d-flex justify-content-center">
+              <a href="/register">Register</a>
+            </MDBCol>
+          </MDBRow>
+          <MDBBtn onClick={handleSubmit} type="submit" block>
+            Sign in
+          </MDBBtn>
+        </form>
+      )}
     </div>
   );
 }

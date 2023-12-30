@@ -48,8 +48,10 @@ public class LoginService {
                 responseToClient.setRole(String.valueOf(user.getRole()));
                 responseToClient.setToken(jwtService.generateToken(user));
                 try {
-                    userPhoto = awsService.getUserPhoto(user.getEmail());
-                    if(userPhoto == null){
+
+                    if(awsService.doesObjectExist(user.getEmail())){
+                        userPhoto = awsService.getUserPhoto(user.getEmail());
+                    } else {
                         userPhoto = awsService.getUserPhoto("defaultUser/ProfilePic.jpg");
                     }
                 } catch (Exception e){
