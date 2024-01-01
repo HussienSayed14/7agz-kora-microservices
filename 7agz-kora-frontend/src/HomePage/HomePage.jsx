@@ -9,11 +9,7 @@ function HomePage() {
   const imageCookie = cookies.get("image");
   return (
     <div>
-      <Avatar
-        alt="Se7s Pic"
-        src={imageCookie}
-        style={{ width: "70px", height: "70px" }}
-      />
+      <Avatar alt="Se7s Pic" src={imageCookie} width={250} height={250} />
     </div>
   );
 }
