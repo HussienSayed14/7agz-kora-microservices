@@ -44,21 +44,7 @@ function ForgotPasswordRequest() {
 
   function handleSuccessLogin(response) {
     if (response.responseCode === "0") {
-      const cookie = new Cookies();
-      cookie.set("token", response.token, {
-        path: "/",
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      });
-      cookie.set("image", response.photoUrl, {
-        path: "/",
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      });
-      cookie.set("fullName", response.firstName + " " + response.lastName, {
-        path: "/",
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      });
-
-      window.location = "/homePage";
+      window.location = "/forgotPassword";
     }
   }
 
@@ -74,7 +60,7 @@ function ForgotPasswordRequest() {
     const endPoint = "accounts/api/v1/auth";
     setLoading(true);
     axios
-      .post(`${baseUrl}${endPoint}/login`, loginRequest)
+      .post(`${baseUrl}${endPoint}/forgotPasswordRequest`, loginRequest)
       .then((res) => {
         handleSuccessLogin(res.data);
         setLoading(false);
@@ -121,14 +107,14 @@ function ForgotPasswordRequest() {
           />
           <MDBRow className="mb-4">
             <MDBCol className="d-flex">
-              <a href="/forgotPasswordRequest">Forgot password?</a>
+              <a href="/login">Login</a>
             </MDBCol>
             <MDBCol className="d-flex justify-content-center">
               <a href="/register">Register</a>
             </MDBCol>
           </MDBRow>
           <MDBBtn onClick={handleSubmit} type="submit" block>
-            Sign in
+            Submit
           </MDBBtn>
         </form>
       )}
