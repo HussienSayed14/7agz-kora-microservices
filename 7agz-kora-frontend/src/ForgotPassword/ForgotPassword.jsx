@@ -71,6 +71,7 @@ function ForgotPassword() {
         Authorization: `Bearer ${token}`,
       },
     };
+    console.log(config);
     axios
       .post(`${baseUrl}${endPoint}/forgotPassword`, loginRequest, config)
       .then((res) => {
