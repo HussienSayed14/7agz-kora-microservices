@@ -21,11 +21,13 @@ function ForgotPassword() {
   const baseUrl = process.env.REACT_APP_API_URL;
   const [loginRequest, setLoginRequest] = useState({
     email: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
   const [renderCounter, setRenderCounter] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [optSmModal, setOptSmModal] = useState(false);
+  const [token, setToken] = useState("");
 
   const toggleOpen = () => setOptSmModal(!optSmModal);
 
@@ -39,26 +41,15 @@ function ForgotPassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const cookie = new Cookies();
+    const searchParams = new URLSearchParams(document.location.search);
+    setToken(searchParams.get("token"));
     setRenderCounter(renderCounter + 1);
   };
 
   function handleSuccessLogin(response) {
     if (response.responseCode === "0") {
-      const cookie = new Cookies();
-      cookie.set("token", response.token, {
-        path: "/",
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      });
-      cookie.set("image", response.photoUrl, {
-        path: "/",
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      });
-      cookie.set("fullName", response.firstName + " " + response.lastName, {
-        path: "/",
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      });
-
-      window.location = "/forgotPassword";
+      window.location = "/login";
     }
   }
 
@@ -71,10 +62,15 @@ function ForgotPassword() {
     if (loginRequest.email === "") {
       return;
     }
-    const endPoint = "accounts/api/v1/auth";
+    const endPoint = "accounts/api/v1/secured";
     setLoading(true);
+    let config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     axios
-      .post(`${baseUrl}${endPoint}/forgotPasswordRequest`, loginRequest)
+      .post(`${baseUrl}${endPoint}/forgotPassword`, loginRequest, config)
       .then((res) => {
         handleSuccessLogin(res.data);
         setLoading(false);
@@ -114,17 +110,17 @@ function ForgotPassword() {
           <MDBInput
             onChange={handleInputChange}
             className="mb-4 email-field"
-            type="email"
+            type="password"
             id="form1Example1"
             label="Email address"
-            name="email"
+            name="password"
           />
           <MDBRow className="mb-4">
             <MDBCol className="d-flex">
-              <a href="/login">Login</a>
+              <a href="/login">Resend</a>
             </MDBCol>
             <MDBCol className="d-flex justify-content-center">
-              <a href="/register">Register</a>
+              <a href="/register">Login Page</a>
             </MDBCol>
           </MDBRow>
           <MDBBtn onClick={handleSubmit} type="submit" block>
