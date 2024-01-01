@@ -15,7 +15,7 @@ import {
   MDBModalBody,
 } from "mdb-react-ui-kit";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
-import "./Login.css";
+import "./ForgotPassword.css";
 
 function ForgotPasswordRequest() {
   const baseUrl = process.env.REACT_APP_API_URL;
@@ -44,7 +44,8 @@ function ForgotPasswordRequest() {
 
   function handleSuccessLogin(response) {
     if (response.responseCode === "0") {
-      window.location = "/forgotPassword";
+      console.log(response);
+      //window.location = "/forgotPassword";
     }
   }
 

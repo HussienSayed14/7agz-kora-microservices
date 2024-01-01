@@ -15,7 +15,7 @@ import {
   MDBModalBody,
 } from "mdb-react-ui-kit";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
-import "./Login.css";
+import "./ForgotPassword.css";
 
 function ForgotPassword() {
   const baseUrl = process.env.REACT_APP_API_URL;
@@ -41,15 +41,16 @@ function ForgotPassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const cookie = new Cookies();
+    console.log("Extracting param");
     const searchParams = new URLSearchParams(document.location.search);
+    console.log("Extracted Param: ", searchParams.get("token"));
     setToken(searchParams.get("token"));
     setRenderCounter(renderCounter + 1);
   };
 
   function handleSuccessLogin(response) {
     if (response.responseCode === "0") {
-      window.location = "/login";
+      //window.location = "/login";
     }
   }
 
@@ -59,10 +60,11 @@ function ForgotPassword() {
   }
 
   useEffect(() => {
-    if (loginRequest.email === "") {
+    if (loginRequest.password === "") {
       return;
     }
     const endPoint = "accounts/api/v1/secured";
+    console.log("URL WILL BE CALLED");
     setLoading(true);
     let config = {
       headers: {
@@ -72,11 +74,12 @@ function ForgotPassword() {
     axios
       .post(`${baseUrl}${endPoint}/forgotPassword`, loginRequest, config)
       .then((res) => {
+        console.log(res.data);
         handleSuccessLogin(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log(err.response);
         setLoading(false);
         handleFailedLogin(err.response.data);
       });
@@ -112,7 +115,7 @@ function ForgotPassword() {
             className="mb-4 email-field"
             type="password"
             id="form1Example1"
-            label="Email address"
+            label="Password"
             name="password"
           />
           <MDBRow className="mb-4">
