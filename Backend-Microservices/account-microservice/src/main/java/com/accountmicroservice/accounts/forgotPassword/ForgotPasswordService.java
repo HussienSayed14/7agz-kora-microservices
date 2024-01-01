@@ -12,6 +12,7 @@ import com.accountmicroservice.util.DateTimeFormatter;
 import com.accountmicroservice.util.EmailService;
 import com.accountmicroservice.util.GenericResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class ForgotPasswordService {
     private final OtpRepository otpRepository;
     private final EmailService emailService;
     private final JwtService jwtService;
+    private final Environment environment;
 
     public ResponseEntity<RequestRegisterResponse> forgotPasswordRequest(GetOtpRequest otpRequest){
         RequestRegisterResponse responseToClient = new RequestRegisterResponse();
@@ -33,7 +35,8 @@ public class ForgotPasswordService {
             return ResponseEntity.badRequest().body(responseToClient);
         }
         String token = jwtService.generateForgotPasswordToken(user);
-        String authLink = "http://localhost:8080/accounts/api/v1/secured/forgotPassword?token=" + token;
+        String urlToken = "/?token=" + token;
+        String authLink = environment.getProperty("frontend.forgot.password.url") + urlToken;
         if(createForgotPasswordRecord(otpRequest.getEmail(), authLink)){
             responseToClient.setSuccessful();
             String body = "Please do not Share this link with anyone \n" + authLink + "\nThis link will expire in 10 minutes";
