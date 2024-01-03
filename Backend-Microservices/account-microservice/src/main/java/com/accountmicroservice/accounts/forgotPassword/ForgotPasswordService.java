@@ -71,9 +71,7 @@ public class ForgotPasswordService {
             userRepository.save(user);
             responseToClient.setSuccessful();
         }
-
         return ResponseEntity.status(responseToClient.getHttpStatus()).body(responseToClient);
-
     }
 
     private boolean isTokenValid(OTP otpRecord, GenericResponses responseToClient) {
