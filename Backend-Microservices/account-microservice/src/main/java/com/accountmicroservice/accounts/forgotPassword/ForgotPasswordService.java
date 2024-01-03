@@ -14,6 +14,7 @@ import com.accountmicroservice.util.GenericResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +26,7 @@ public class ForgotPasswordService {
     private final EmailService emailService;
     private final JwtService jwtService;
     private final Environment environment;
+    private final PasswordEncoder passwordEncoder;
 
     public ResponseEntity<RequestRegisterResponse> forgotPasswordRequest(GetOtpRequest otpRequest){
         RequestRegisterResponse responseToClient = new RequestRegisterResponse();
@@ -65,7 +67,7 @@ public class ForgotPasswordService {
         }
         if(isTokenValid(otpRecord, responseToClient)
                 && isTokenCorrect(token, otpRecord, responseToClient)){
-            user.setPassword(forgotPasswordRequest.getPassword());
+            user.setPassword(passwordEncoder.encode(forgotPasswordRequest.getPassword()));
             userRepository.save(user);
             responseToClient.setSuccessful();
         }
