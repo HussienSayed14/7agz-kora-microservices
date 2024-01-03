@@ -48,10 +48,12 @@ public class ForgotPasswordService {
     }
 
 
-    public ResponseEntity<GenericResponses> validateAndChangePassword(ForgotPasswordRequest forgotPasswordRequest, String token){
+    public ResponseEntity<GenericResponses> validateAndChangePassword(ForgotPasswordRequest forgotPasswordRequest, String bearerToken){
 
+        String token = bearerToken.substring(7);
+        String email = jwtService.extractUserEmail(token);
         GenericResponses responseToClient = new GenericResponses();
-        User user = userRepository.findByEmail(forgotPasswordRequest.getEmail());
+        User user = userRepository.findByEmail(email);
         if(user == null){
             responseToClient.setEmailDoesNotExist();
             return ResponseEntity.badRequest().body(responseToClient);
