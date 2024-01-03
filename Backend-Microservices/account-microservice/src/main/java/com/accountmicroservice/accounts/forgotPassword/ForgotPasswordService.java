@@ -37,7 +37,7 @@ public class ForgotPasswordService {
         String token = jwtService.generateForgotPasswordToken(user);
         String urlToken = "/?token=" + token;
         String authLink = environment.getProperty("frontend.forgot.password.url") + urlToken;
-        if(createForgotPasswordRecord(otpRequest.getEmail(), authLink)){
+        if(createForgotPasswordRecord(otpRequest.getEmail(), token)){
             responseToClient.setSuccessful();
             String body = "Please do not Share this link with anyone \n" + authLink + "\nThis link will expire in 10 minutes";
             emailService.sendEmail(otpRequest.getEmail(),"7agz Kora FORGOT PASSWORD REQUEST", body);
@@ -106,6 +106,10 @@ public class ForgotPasswordService {
                 .build();
 
         try {
+           OTP found =  otpRepository.getForgotPasswordOtpByEmail(email);
+            if(found != null){
+                otpRepository.delete(found);
+            }
             otpRepository.save(otpRecord);
             return true;
         } catch (Exception e) {
