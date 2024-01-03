@@ -58,7 +58,7 @@ public class ForgotPasswordService {
             responseToClient.setEmailDoesNotExist();
             return ResponseEntity.badRequest().body(responseToClient);
         }
-        OTP otpRecord = otpRepository.getForgotPasswordOtpByEmail(forgotPasswordRequest.getEmail());
+        OTP otpRecord = otpRepository.getForgotPasswordOtpByEmail(email);
         if(otpRecord == null){
             responseToClient.setOtpNotFound();
             return ResponseEntity.badRequest().body(responseToClient);
