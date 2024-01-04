@@ -3,6 +3,7 @@ package com.accountmicroservice.util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -14,15 +15,18 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    //TODO: Change this to an async method
+    @Async
     public void sendEmail(String to, String subject, String body) {
+        System.out.println("Sending Email");
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
 
         try {
+
             mailSender.send(message);
+            System.out.println("Mail will be Sent");
         } catch (Exception e) {
             System.out.println("Error Sending Email");
             System.out.println(e.getMessage());
