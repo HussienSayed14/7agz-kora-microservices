@@ -3,6 +3,8 @@ package com.fieldmicroservice.fieldmicroservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "USER")
@@ -61,6 +63,8 @@ public class User {
     private int lockRemovalTime;
     @Column(name = "PROFILE_PICTURE")
     private String profilePicture;
+    @OneToMany(mappedBy = "fieldOwner")
+    private List<Field> fieldList;
 
 
 }
