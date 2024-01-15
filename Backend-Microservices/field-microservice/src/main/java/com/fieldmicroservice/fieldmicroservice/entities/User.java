@@ -65,6 +65,9 @@ public class User {
     private String profilePicture;
     @OneToMany(mappedBy = "fieldOwner")
     private List<Field> fieldList;
+    @OneToMany(mappedBy = "bookingUser")
+    private List<BookingHour> bookingHoursList;
+
 
 
 }
