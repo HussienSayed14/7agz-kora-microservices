@@ -4,6 +4,8 @@ package com.fieldmicroservice.fieldmicroservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Field")
 @AllArgsConstructor
@@ -51,8 +53,8 @@ public class Field {
     private boolean isBlocked;
     @Column(name= "AVERAGE_PRICE")
     private double averagePrice;
-//    @OneToMany(mappedBy = "field")
-//    private List<BookingHours> bookingHoursList;
+    @OneToMany(mappedBy = "field")
+    private List<BookingHour> bookingHoursList;
     @ManyToOne
     @JoinColumn(name="USER_ID", nullable=false)
     private User fieldOwner;
