@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 public class BookingHours {
         @Id
-        private long uid;
+        private String  uid;
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private long counter;
         private int bookingDate;
