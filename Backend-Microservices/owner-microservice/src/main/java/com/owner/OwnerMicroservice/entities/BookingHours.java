@@ -29,5 +29,8 @@ public class BookingHours {
         @ManyToOne
         @JoinColumn(name="FIELD_ID", nullable=false)
         private Field fieldId;
+//        @ManyToOne
+//        @JoinColumn(name="BOOKED_BY_ID", nullable=false)
+//        private User userId;
 
 }
