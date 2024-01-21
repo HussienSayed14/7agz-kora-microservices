@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class Field {
     @Id
-    private long uid;
+    private String uid;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long counter;
     private String fieldName;
