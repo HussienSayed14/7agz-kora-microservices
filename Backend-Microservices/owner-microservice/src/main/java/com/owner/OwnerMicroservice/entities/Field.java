@@ -25,7 +25,11 @@ public class Field {
     private boolean isDeleted;
     private boolean isBlocked;
     private long hoursBooked;
+    private int hourPrice;
     private int rating;
     private int creationDate;
+    @ManyToOne
+    @JoinColumn(name="FIELD_OWNER_ID", nullable=false)
+    private FieldOwner fieldOwner;
 
 }

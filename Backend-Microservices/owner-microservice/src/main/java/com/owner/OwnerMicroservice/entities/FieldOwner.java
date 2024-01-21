@@ -3,6 +3,8 @@ package com.owner.OwnerMicroservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "FIELD_OWNER")
 @AllArgsConstructor
@@ -28,6 +30,8 @@ public class FieldOwner {
     private boolean isLocked;
     private int creationDate;
     private int priority;
+    @OneToMany(mappedBy = "fieldOwner")
+    private List<Field> ownedFieldsList;
 
 
 
