@@ -32,6 +32,9 @@ public class FieldOwner {
     private int priority;
     @OneToMany(mappedBy = "fieldOwner")
     private List<Field> ownedFieldsList;
+    @OneToMany(mappedBy = "ownerId")
+    private List<FieldFees> fieldFeesList;
+
 
 
 

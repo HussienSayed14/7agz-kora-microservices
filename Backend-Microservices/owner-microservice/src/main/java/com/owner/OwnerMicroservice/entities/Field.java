@@ -35,5 +35,7 @@ public class Field {
     private FieldOwner fieldOwner;
     @OneToMany(mappedBy = "fieldId")
     private List<BookingHours> bookingHoursList;
+    @OneToMany(mappedBy = "fieldId")
+    private List<FieldFees> fieldFeesList;
 
 }
