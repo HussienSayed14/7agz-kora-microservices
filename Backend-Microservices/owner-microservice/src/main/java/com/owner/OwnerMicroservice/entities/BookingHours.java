@@ -26,5 +26,8 @@ public class BookingHours {
         private String bookingStatus; // Available, Booked, Locked
         private String hourStatus; // Available, Pending, Unavailable
         private int fee;
+        @ManyToOne
+        @JoinColumn(name="FIELD_ID", nullable=false)
+        private Field fieldId;
 
 }

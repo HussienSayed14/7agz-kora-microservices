@@ -4,6 +4,8 @@ package com.owner.OwnerMicroservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "FIELD")
 @AllArgsConstructor
@@ -31,5 +33,7 @@ public class Field {
     @ManyToOne
     @JoinColumn(name="FIELD_OWNER_ID", nullable=false)
     private FieldOwner fieldOwner;
+    @OneToMany(mappedBy = "fieldId")
+    private List<BookingHours> bookingHoursList;
 
 }
