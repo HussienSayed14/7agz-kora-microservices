@@ -1,35 +1,31 @@
 package com.owner.OwnerMicroservice.entities;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "FIELD_OWNER")
+@Table(name = "FIELD")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class FieldOwner {
-
+public class Field {
     @Id
-    private String userName;
+    private long uid;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long counter;
-    private String email;
-    private String password;
-    private String fullName;
-    private String phoneNumber;
-    private String address;
-    private String role;
-    private String nationalID;
+    private String fieldName;
+    private String fieldType;
+    private String fieldSize;
+    private String fieldLocation;
     private boolean isActive;
+    private boolean isAvailable;
+    private boolean isDeleted;
     private boolean isBlocked;
-    private boolean isLocked;
+    private long hoursBooked;
+    private int rating;
     private int creationDate;
-    private int priority;
-
-
-
 
 }
