@@ -20,5 +20,6 @@ public class FieldService {
 
     public ResponseEntity getAllOwnerFields(String bearerToken) {
         return null;
+
     }
 }
