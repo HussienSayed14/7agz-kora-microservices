@@ -14,4 +14,11 @@ public class FieldService {
         return null;
     }
 
+    public ResponseEntity getFieldById(String fieldId) {
+        return null;
+    }
+
+    public ResponseEntity getAllOwnerFields(String bearerToken) {
+        return null;
+    }
 }

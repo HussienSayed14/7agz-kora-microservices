@@ -24,7 +24,7 @@ public class FieldController {
 
     @GetMapping("/getAllFields")
     public ResponseEntity getAllOwnerFields(@RequestHeader(value = "Authorization") String bearerToken){
-        return fieldService.getAllOwnerFields();
+        return fieldService.getAllOwnerFields(bearerToken);
     }
 
 
