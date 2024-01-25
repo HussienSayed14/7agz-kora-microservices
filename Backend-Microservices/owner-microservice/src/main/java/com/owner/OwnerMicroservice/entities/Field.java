@@ -24,6 +24,7 @@ public class Field {
     private String fieldLocation;
     private boolean isActive;
     private boolean isAvailable;
+    private boolean isApproved;
     private boolean isDeleted;
     private boolean isBlocked;
     private long hoursBooked;
