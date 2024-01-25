@@ -33,6 +33,17 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// ------------------------------ JWT Dependencies ------------------------------
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	//----------------------- AWS S3 -----------------------
+	implementation 'software.amazon.awssdk:s3:2.17.165' // Use the latest version
+
 }
 
 dependencyManagement {
