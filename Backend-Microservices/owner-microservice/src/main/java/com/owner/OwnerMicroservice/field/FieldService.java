@@ -3,6 +3,7 @@ package com.owner.OwnerMicroservice.field;
 
 import com.owner.OwnerMicroservice.entities.Field;
 import com.owner.OwnerMicroservice.field.requests.CreateFieldRequest;
+import com.owner.OwnerMicroservice.field.responses.GetFieldResponse;
 import com.owner.OwnerMicroservice.repositories.FieldRepository;
 import com.owner.OwnerMicroservice.util.DateTimeFormatter;
 import com.owner.OwnerMicroservice.util.GenericResponse;
@@ -50,11 +51,28 @@ public class FieldService {
         return ResponseEntity.status(response.getHttpStatus()).body(response);
     }
 
-    public ResponseEntity getFieldById(String fieldId) {
-        return null;
+    public ResponseEntity<GetFieldResponse> getFieldById(String fieldId) {
+        GetFieldResponse response = new GetFieldResponse();
+        try {
+            Field field = fieldRepository.getFieldById(fieldId);
+            if(field == null){
+                response.setFieldNotFound();
+                return ResponseEntity.status(response.getHttpStatus()).body(response);
+            }
+            response.setField(field);
+            response.setSuccessful();
+    }catch (Exception e){
+            response.setServerErrorHappened();
+            logger.error("Error while getting field: " + e.getMessage());
+        }
+        return ResponseEntity.status(response.getHttpStatus()).body(response);
     }
 
+
+
+    //Todo: Add query to get all fields by owner id using JOIN
     public ResponseEntity getAllOwnerFields(String bearerToken) {
+        String jwt = bearerToken.substring(7);
         return null;
 
     }

@@ -1,6 +1,7 @@
 package com.owner.OwnerMicroservice.field;
 
 import com.owner.OwnerMicroservice.field.requests.CreateFieldRequest;
+import com.owner.OwnerMicroservice.field.responses.GetFieldResponse;
 import com.owner.OwnerMicroservice.util.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +24,7 @@ public class FieldController {
     }
 
     @GetMapping("/getField/{fieldId}")
-    public ResponseEntity getFieldById(@PathVariable String fieldId){
+    public ResponseEntity<GetFieldResponse> getFieldById(@PathVariable String fieldId){
         return fieldService.getFieldById(fieldId);
     }
 

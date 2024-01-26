@@ -142,6 +142,13 @@ public class GenericResponse {
     }
 
 
+    public void setFieldNotFound() {
+        this.responseCode = "13";
+        this.responseMessage = "This field is not found";
+        this.httpStatus = HttpStatus.BAD_REQUEST;
+        this.responseStatus = "Falied";
+        this.tranDate = DateTimeFormatter.getCurrentDate();
+        this.tranTime = DateTimeFormatter.getCurrentTime();
 
-
+    }
 }
