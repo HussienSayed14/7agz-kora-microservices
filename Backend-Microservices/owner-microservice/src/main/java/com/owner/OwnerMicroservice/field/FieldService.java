@@ -20,7 +20,7 @@ public class FieldService {
 
     private final FieldRepository fieldRepository;
     private static final Logger logger = LoggerFactory.getLogger(FieldService.class);
-    public ResponseEntity createField(CreateFieldRequest request) {
+    public ResponseEntity<GenericResponse> createField(CreateFieldRequest request) {
         GenericResponse response = new GenericResponse();
         Field field = Field.builder()
                 .uid(UUID.randomUUID().toString())

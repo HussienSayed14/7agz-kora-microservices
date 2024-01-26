@@ -1,6 +1,7 @@
 package com.owner.OwnerMicroservice.field;
 
 import com.owner.OwnerMicroservice.field.requests.CreateFieldRequest;
+import com.owner.OwnerMicroservice.util.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class FieldController {
 
     @PostMapping("/createField")
     @Operation(summary = "Create Field", description = "This Api is used to create a new field.")
-    public ResponseEntity createField(@RequestBody CreateFieldRequest request){
+    public ResponseEntity<GenericResponse> createField(@RequestBody CreateFieldRequest request){
         return fieldService.createField(request);
     }
 
