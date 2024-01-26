@@ -35,6 +35,7 @@ public class FieldService {
                 .isDeleted(false)
                 .isBlocked(false)
                 .rating(0)
+                .hoursBooked(0)
                 .creationDate(DateTimeFormatter.getCurrentDate())
                 .build();
         try {
