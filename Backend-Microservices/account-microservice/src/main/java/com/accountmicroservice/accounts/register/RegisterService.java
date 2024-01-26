@@ -3,7 +3,6 @@ package com.accountmicroservice.accounts.register;
 import com.accountmicroservice.accounts.register.requests.EmailVerificationRequest;
 import com.accountmicroservice.accounts.register.requests.RegisterRequest;
 import com.accountmicroservice.accounts.register.responses.VerifyOtpResponse;
-import com.accountmicroservice.aws.AwsService;
 import com.accountmicroservice.entities.OTP;
 import com.accountmicroservice.entities.Roles;
 import com.accountmicroservice.entities.User;
@@ -16,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 
 @Service
 @RequiredArgsConstructor
