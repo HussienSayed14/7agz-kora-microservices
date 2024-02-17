@@ -2,7 +2,6 @@ package com.owner.OwnerMicroservice.auth;
 
 import com.owner.OwnerMicroservice.auth.requests.CreateOwnerRequest;
 import com.owner.OwnerMicroservice.entities.FieldOwner;
-import com.owner.OwnerMicroservice.field.FieldService;
 import com.owner.OwnerMicroservice.repositories.FieldOwnerRepository;
 import com.owner.OwnerMicroservice.util.DateTimeFormatter;
 import com.owner.OwnerMicroservice.util.GenericResponse;
