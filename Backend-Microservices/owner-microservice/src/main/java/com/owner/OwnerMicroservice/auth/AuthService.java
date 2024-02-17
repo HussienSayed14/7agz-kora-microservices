@@ -27,7 +27,7 @@ public class AuthService {
 
     private boolean isUserRegistered(String userName,GenericResponse response) {
         FieldOwner owner = fieldOwnerRepository.findOwnerByUsername(userName);
-        if (owner != null) {
+        if (owner == null) {
             return false;
         }
         response.setUserAlreadyExist();
