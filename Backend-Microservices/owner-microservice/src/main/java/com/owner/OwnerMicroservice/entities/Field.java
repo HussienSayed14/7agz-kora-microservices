@@ -32,7 +32,7 @@ public class Field {
     private int rating;
     private int creationDate;
     @ManyToOne
-    @JoinColumn(name="FIELD_OWNER_ID", nullable=true)
+    @JoinColumn(name="FIELD_OWNER_ID", nullable=false)
     private FieldOwner fieldOwner;
     @OneToMany(mappedBy = "fieldId")
     private List<BookingHours> bookingHoursList;
