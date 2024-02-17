@@ -151,4 +151,14 @@ public class GenericResponse {
         this.tranTime = DateTimeFormatter.getCurrentTime();
 
     }
+
+    public void setUserAlreadyExist(){
+        this.responseCode = "14";
+        this.responseMessage = "This Username already exists";
+        this.httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+        this.responseStatus = "Falied";
+        this.tranDate = DateTimeFormatter.getCurrentDate();
+        this.tranTime = DateTimeFormatter.getCurrentTime();
+    }
+
 }

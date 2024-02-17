@@ -28,6 +28,7 @@ public class FieldOwner {
     private boolean isActive;
     private boolean isBlocked;
     private boolean isLocked;
+    private boolean isVerified;
     private int creationDate;
     private int priority;
     @OneToMany(mappedBy = "fieldOwner")
